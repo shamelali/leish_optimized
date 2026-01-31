@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Leish Studio - Professional studio booking for podcasts, interviews, and content creation">
+    <meta name="theme-color" content="#7c3aed">
+    <title>Leish Studio - Professional Studio Booking</title>
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#faf5ff',
+                            100: '#f3e8ff',
+                            200: '#e9d5ff',
+                            300: '#d8b4fe',
+                            400: '#c084fc',
+                            500: '#a855f7',
+                            600: '#9333ea',
+                            700: '#7c3aed',
+                            800: '#6b21a8',
+                            900: '#581c87',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+        
+        /* Loading States */
+        .skeleton {
+            background: linear-gradient(90deg, #2d2d3a 25%, #3d3d4a 50%, #2d2d3a 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+        }
+        
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .animate-fadeIn {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        .animate-slideIn {
+            animation: slideIn 0.3s ease-out forwards;
+        }
+        
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        /* Glass Morphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .glass-dark {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, #a855f7, #ec4899, #f97316);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Button Styles */
+        .btn-primary {
+            background: linear-gradient(135deg, #7c3aed, #a855f7);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(124, 58, 237, 0.4);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Card Styles */
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(124, 58, 237, 0.3);
+            transform: translateY(-4px);
+        }
+        
+        /* Form Styles */
+        .input-field {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+        }
+        
+        /* Modal */
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(124, 58, 237, 0.5);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(124, 58, 237, 0.7);
+        }
+        
+        /* Studio Card Animation Delays */
+        .studio-card:nth-child(1) { animation-delay: 0.1s; }
+        .studio-card:nth-child(2) { animation-delay: 0.2s; }
+        .studio-card:nth-child(3) { animation-delay: 0.3s; }
+        .studio-card:nth-child(4) { animation-delay: 0.4s; }
+        
+        /* Toast Notifications */
+        .toast {
+            animation: slideIn 0.3s ease-out, fadeOut 0.3s ease-out 2.7s forwards;
+        }
+        
+        @keyframes fadeOut {
+            to { opacity: 0; transform: translateX(100px); }
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- App Container -->
+    <div id="app">
+        <!-- Navigation -->
+        <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 glass-dark">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <a href="#" class="flex items-center gap-2">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                            <i data-lucide="aperture" class="w-6 h-6 text-white"></i>
+                        </div>
+                        <span class="text-xl font-bold">Leish Studio</span>
+                    </a>
+                    
+                    <div class="hidden md:flex items-center gap-6">
+                        <a href="#features" class="text-gray-300 hover:text-white transition-colors">Features</a>
+                        <a href="#studios" class="text-gray-300 hover:text-white transition-colors">Studios</a>
+                        <a href="#pricing" class="text-gray-300 hover:text-white transition-colors">Pricing</a>
+                    </div>
+                    
+                    <div class="flex items-center gap-3">
+                        <button id="authBtn" onclick="openAuthModal()" class="btn-primary px-4 py-2 rounded-lg font-medium flex items-center gap-2">
+                            <i data-lucide="log-in" class="w-4 h-4"></i>
+                            <span>Sign In</span>
+                        </button>
+                        <button class="md:hidden p-2" onclick="toggleMobileMenu()">
+                            <i data-lucide="menu" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="hidden md:hidden glass-dark border-t border-white/10">
+                <div class="px-4 py-3 space-y-2">
+                    <a href="#features" class="block py-2 text-gray-300 hover:text-white">Features</a>
+                    <a href="#studios" class="block py-2 text-gray-300 hover:text-white">Studios</a>
+                    <a href="#pricing" class="block py-2 text-gray-300 hover:text-white">Pricing</a>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Hero Section -->
+        <section class="pt-32 pb-20 px-4">
+            <div class="max-w-7xl mx-auto text-center">
+                <div class="animate-fadeIn">
+                    <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm text-purple-300 mb-6">
+                        <i data-lucide="sparkles" class="w-4 h-4"></i>
+                        Now with instant booking
+                    </span>
+                    
+                    <h1 class="hero-title text-5xl md:text-7xl font-extrabold mb-6">
+                        Book Your <span class="gradient-text">Creative Space</span>
+                    </h1>
+                    
+                    <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-10">
+                        Professional studio facilities with state-of-the-art equipment. Perfect for podcasts, interviews, and content creation.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <button onclick="scrollToStudios()" class="btn-primary px-8 py-4 rounded-xl font-semibold text-lg flex items-center justify-center gap-2">
+                            <i data-lucide="calendar" class="w-5 h-5"></i>
+                            Book Now
+                        </button>
+                        <button onclick="openGallery()" class="btn-secondary px-8 py-4 rounded-xl font-semibold text-lg flex items-center justify-center gap-2">
+                            <i data-lucide="images" class="w-5 h-5"></i>
+                            View Gallery
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Stats -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20">
+                    <div class="glass rounded-2xl p-6 animate-fadeIn" style="animation-delay: 0.2s">
+                        <div class="text-3xl font-bold gradient-text">500+</div>
+                        <div class="text-gray-400 text-sm mt-1">Sessions Booked</div>
+                    </div>
+                    <div class="glass rounded-2xl p-6 animate-fadeIn" style="animation-delay: 0.3s">
+                        <div class="text-3xl font-bold gradient-text">4.9</div>
+                        <div class="text-gray-400 text-sm mt-1">Average Rating</div>
+                    </div>
+                    <div class="glass rounded-2xl p-6 animate-fadeIn" style="animation-delay: 0.4s">
+                        <div class="text-3xl font-bold gradient-text">24/7</div>
+                        <div class="text-gray-400 text-sm mt-1">Availability</div>
+                    </div>
+                    <div class="glass rounded-2xl p-6 animate-fadeIn" style="animation-delay: 0.5s">
+                        <div class="text-3xl font-bold gradient-text">4</div>
+                        <div class="text-gray-400 text-sm mt-1">Studio Types</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Features Section -->
+        <section id="features" class="py-20 px-4">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4">Why Choose <span class="gradient-text">Leish Studio</span></h2>
+                    <p class="text-gray-400 max-w-xl mx-auto">Everything you need to create professional content</p>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="card p-8 text-center animate-fadeIn">
+                        <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-purple-500/20 to-purple-500/5 flex items-center justify-center mb-6">
+                            <i data-lucide="camera" class="w-8 h-8 text-purple-400"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">Pro Equipment</h3>
+                        <p class="text-gray-400">Access to professional cameras, lighting, microphones, and more</p>
+                    </div>
+                    
+                    <div class="card p-8 text-center animate-fadeIn" style="animation-delay: 0.1s">
+                        <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-pink-500/20 to-pink-500/5 flex items-center justify-center mb-6">
+                            <i data-lucide="zap" class="w-8 h-8 text-pink-400"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">Instant Booking</h3>
+                        <p class="text-gray-400">Real-time availability and instant confirmation for your sessions</p>
+                    </div>
+                    
+                    <div class="card p-8 text-center animate-fadeIn" style="animation-delay: 0.2s">
+                        <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-orange-500/20 to-orange-500/5 flex items-center justify-center mb-6">
+                            <i data-lucide="wallet" class="w-8 h-8 text-orange-400"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">Flexible Pricing</h3>
+                        <p class="text-gray-400">Hourly rates, recurring discounts, and promotional offers available</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Studios Section -->
+        <section id="studios" class="py-20 px-4">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4">Our <span class="gradient-text">Studios</span></h2>
+                    <p class="text-gray-400 max-w-xl mx-auto">Choose the perfect space for your project</p>
+                </div>
+                
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6" id="studiosGrid">
+                    <!-- Studios will be loaded dynamically -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- Booking Section -->
+        <section id="booking" class="py-20 px-4">
+            <div class="max-w-3xl mx-auto">
+                <div class="glass rounded-3xl p-8 md:p-12">
+                    <div class="text-center mb-10">
+                        <h2 class="text-3xl font-bold mb-2">Quick Book</h2>
+                        <p class="text-gray-400">Select your studio and time to get started</p>
+                    </div>
+                    
+                    <form id="bookingForm" class="space-y-6">
+                        <div class="grid sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Studio Type</label>
+                                <select id="studioSelect" class="input-field w-full px-4 py-3 rounded-xl text-white">
+                                    <option value="podcast">Podcast Studio - RM 50/hr</option>
+                                    <option value="video">Video Studio - RM 75/hr</option>
+                                    <option value="photo">Photo Studio - RM 60/hr</option>
+                                    <option value="music">Music Studio - RM 80/hr</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Date</label>
+                                <input type="date" id="dateSelect" class="input-field w-full px-4 py-3 rounded-xl text-white">
+                            </div>
+                        </div>
+                        
+                        <div class="grid sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Start Time</label>
+                                <select id="timeSelect" class="input-field w-full px-4 py-3 rounded-xl text-white">
+                                    <!-- Times will be generated -->
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Duration</label>
+                                <select id="durationSelect" class="input-field w-full px-4 py-3 rounded-xl text-white">
+                                    <option value="1">1 hour</option>
+                                    <option value="2">2 hours</option>
+                                    <option value="4">4 hours</option>
+                                    <option value="8">8 hours</option>
+                                    <option value="12">12 hours</option>
+                                    <option value="24">Full Day (24 hours)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Price Summary -->
+                        <div class="glass-dark rounded-xl p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-gray-400">Subtotal</span>
+                                <span id="subtotal" class="font-semibold">RM 50</span>
+                            </div>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-gray-400">Service Fee</span>
+                                <span id="serviceFee" class="font-semibold">RM 5</span>
+                            </div>
+                            <div class="border-t border-white/10 pt-4 flex justify-between items-center">
+                                <span class="text-lg font-semibold">Total</span>
+                                <span id="total" class="text-2xl font-bold gradient-text">RM 55</span>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary w-full py-4 rounded-xl font-semibold text-lg flex items-center justify-center gap-2">
+                            <i data-lucide="credit-card" class="w-5 h-5"></i>
+                            Pay & Book (HitPay)
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Dashboard Section (Hidden by default) -->
+        <section id="dashboard" class="py-20 px-4 hidden">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex items-center justify-between mb-10">
+                    <div>
+                        <h2 class="text-3xl font-bold">Dashboard</h2>
+                        <p class="text-gray-400">Manage your bookings</p>
+                    </div>
+                    <button onclick="scrollToStudios()" class="btn-primary px-6 py-3 rounded-xl font-medium flex items-center gap-2">
+                        <i data-lucide="plus" class="w-5 h-5"></i>
+                        New Booking
+                    </button>
+                </div>
+                
+                <div id="bookingsList" class="grid gap-4">
+                    <!-- Bookings will be loaded dynamically -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer class="py-12 px-4 border-t border-white/10">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="flex items-center gap-2">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                            <i data-lucide="aperture" class="w-6 h-6 text-white"></i>
+                        </div>
+                        <span class="text-xl font-bold">Leish Studio</span>
+                    </div>
+                    
+                    <div class="flex items-center gap-6 text-gray-400 text-sm">
+                        <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                        <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                        <a href="#" class="hover:text-white transition-colors">Contact</a>
+                    </div>
+                    
+                    <div class="text-gray-500 text-sm">
+                        © 2026 Leish Studio. All rights reserved.
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Auth Modal -->
+    <div id="authModal" class="fixed inset-0 z-50 hidden">
+        <div class="modal-overlay absolute inset-0" onclick="closeAuthModal()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div class="glass rounded-3xl w-full max-w-md p-8 relative animate-fadeIn">
+                <button onclick="closeAuthModal()" class="absolute top-4 right-4 p-2 text-gray-400 hover:text-white transition-colors">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+                
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center mb-4">
+                        <i data-lucide="aperture" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold">Welcome to Leish Studio</h3>
+                    <p class="text-gray-400 mt-2">Sign in or create an account to start booking</p>
+                </div>
+                
+                <!-- Auth Tabs -->
+                <div class="flex gap-2 mb-6">
+                    <button onclick="switchAuthTab('signin')" id="signinTab" class="flex-1 py-3 rounded-xl font-medium transition-all bg-purple-600">Sign In</button>
+                    <button onclick="switchAuthTab('register')" id="registerTab" class="flex-1 py-3 rounded-xl font-medium transition-all text-gray-400 hover:text-white">Register</button>
+                </div>
+                
+                <!-- Sign In Form -->
+                <form id="signinForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                        <input type="email" class="input-field w-full px-4 py-3 rounded-xl text-white" placeholder="your@email.com" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Password</label>
+                        <input type="password" class="input-field w-full px-4 py-3 rounded-xl text-white" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn-primary w-full py-3 rounded-xl font-semibold">Sign In</button>
+                </form>
+                
+                <!-- Register Form -->
+                <form id="registerForm" class="space-y-4 hidden">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Full Name</label>
+                        <input type="text" class="input-field w-full px-4 py-3 rounded-xl text-white" placeholder="John Doe" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                        <input type="email" class="input-field w-full px-4 py-3 rounded-xl text-white" placeholder="your@email.com" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Password</label>
+                        <input type="password" class="input-field w-full px-4 py-3 rounded-xl text-white" placeholder="••••••••" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Confirm Password</label>
+                        <input type="password" class="input-field w-full px-4 py-3 rounded-xl text-white" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn-primary w-full py-3 rounded-xl font-semibold">Create Account</button>
+                </form>
+                
+                <div class="relative my-6">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-white/10"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-4 bg-transparent text-gray-400">or</span>
+                    </div>
+                </div>
+                
+                <button onclick="signInWithGoogle()" class="btn-secondary w-full py-3 rounded-xl font-medium flex items-center justify-center gap-3">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    Continue with Google
+                </button>
+                
+                <p class="text-center text-sm text-gray-500 mt-6">
+                    By signing in, you agree to our <a href="#" class="text-purple-400 hover:underline">Terms of Service</a> and <a href="#" class="text-purple-400 hover:underline">Privacy Policy</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Confirm Modal -->
+    <div id="confirmModal" class="fixed inset-0 z-50 hidden">
+        <div class="modal-overlay absolute inset-0" onclick="closeConfirmModal()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div class="glass rounded-2xl w-full max-w-sm p-6 relative animate-fadeIn">
+                <h3 id="confirmTitle" class="text-xl font-bold mb-2">Confirm Action</h3>
+                <p id="confirmMessage" class="text-gray-400 mb-6">Are you sure?</p>
+                <div class="flex gap-3">
+                    <button onclick="closeConfirmModal()" class="btn-secondary flex-1 py-3 rounded-xl font-medium">Cancel</button>
+                    <button id="confirmBtn" class="btn-primary flex-1 py-3 rounded-xl font-medium">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Container -->
+    <div id="toastContainer" class="fixed top-20 right-4 z-50 space-y-3"></div>
+    
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="fixed inset-0 z-50 hidden modal-overlay flex items-center justify-center">
+        <div class="text-center">
+            <div class="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p class="text-gray-300">Processing...</p>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // Configuration
+        // ============================================
+        const CONFIG = {
+            SUPABASE_URL: 'YOUR_SUPABASE_URL',
+            SUPABASE_ANON_KEY: 'YOUR_SUPABASE_ANON_KEY',
+            HITPAY_API_KEY: 'YOUR_HITPAY_API_KEY',
+            SERVICE_FEE_PERCENT: 10,
+            STUDIOS: [
+                { id: 'podcast', name: 'Podcast Studio', price: 50, icon: 'mic', color: 'purple', description: 'Professional audio recording setup' },
+                { id: 'video', name: 'Video Studio', price: 75, icon: 'video', color: 'pink', description: 'Full video production suite' },
+                { id: 'photo', name: 'Photo Studio', price: 60, icon: 'camera', color: 'blue', description: 'Complete photography setup' },
+                { id: 'music', name: 'Music Studio', price: 80, icon: 'music', color: 'orange', description: 'Sound-treated recording room' }
+            ]
+        };
+
+        // ============================================
+        // State Management
+        // ============================================
+        const state = {
+            user: null,
+            bookings: [],
+            selectedStudio: null,
+            isLoading: false
+        };
+
+        // ============================================
+        // Utility Functions
+        // ============================================
+        function $(selector) {
+            return document.querySelector(selector);
+        }
+
+        function $$(selector) {
+            return document.querySelectorAll(selector);
+        }
+
+        function formatDate(date) {
+            return new Date(date).toLocaleDateString('en-MY', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        function formatTime(time) {
+            const [hours, minutes] = time.split(':');
+            const hour = parseInt(hours);
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            const displayHour = hour % 12 || 12;
+            return `${displayHour}:${minutes} ${ampm}`;
+        }
+
+        function formatCurrency(amount) {
+            return `RM ${amount.toFixed(2)}`;
+        }
+
+        // ============================================
+        // Toast Notifications
+        // ============================================
+        function showToast(message, type = 'info') {
+            const container = $('#toastContainer');
+            const toast = document.createElement('div');
+            
+            const colors = {
+                success: 'bg-green-500',
+                error: 'bg-red-500',
+                warning: 'bg-yellow-500',
+                info: 'bg-purple-500'
+            };
+            
+            const icons = {
+                success: 'check-circle',
+                error: 'x-circle',
+                warning: 'alert-triangle',
+                info: 'info'
+            };
+            
+            toast.className = `toast flex items-center gap-3 px-4 py-3 rounded-xl ${colors[type]} text-white shadow-lg`;
+            toast.innerHTML = `
+                <i data-lucide="${icons[type]}" class="w-5 h-5"></i>
+                <span>${message}</span>
+            `;
+            
+            container.appendChild(toast);
+            lucide.createIcons();
+            
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // ============================================
+        // Loading State
+        // ============================================
+        function setLoading(loading) {
+            state.isLoading = loading;
+            $('#loadingOverlay').classList.toggle('hidden', !loading);
+        }
+
+        // ============================================
+        // Navigation
+        // ============================================
+        function toggleMobileMenu() {
+            $('#mobileMenu').classList.toggle('hidden');
+        }
+
+        function scrollToStudios() {
+            $('#booking').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ============================================
+        // Auth Modal
+        // ============================================
+        function openAuthModal() {
+            $('#authModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAuthModal() {
+            $('#authModal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function switchAuthTab(tab) {
+            const isSignin = tab === 'signin';
+            
+            $('#signinTab').classList.toggle('bg-purple-600', isSignin);
+            $('#signinTab').classList.toggle('text-gray-400', !isSignin);
+            $('#registerTab').classList.toggle('bg-purple-600', !isSignin);
+            $('#registerTab').classList.toggle('text-gray-400', isSignin);
+            
+            $('#signinForm').classList.toggle('hidden', !isSignin);
+            $('#registerForm').classList.toggle('hidden', isSignin);
+        }
+
+        async function signInWithGoogle() {
+            showToast('Google sign-in would be implemented with Supabase Auth', 'info');
+        }
+
+        // ============================================
+        // Confirm Modal
+        // ============================================
+        function openConfirmModal(title, message, onConfirm) {
+            $('#confirmTitle').textContent = title;
+            $('#confirmMessage').textContent = message;
+            $('#confirmBtn').onclick = () => {
+                closeConfirmModal();
+                onConfirm();
+            };
+            $('#confirmModal').classList.remove('hidden');
+        }
+
+        function closeConfirmModal() {
+            $('#confirmModal').classList.add('hidden');
+        }
+
+        // ============================================
+        // Gallery
+        // ============================================
+        function openGallery() {
+            showToast('Gallery feature coming soon!', 'info');
+        }
+
+        // ============================================
+        // Studios
+        // ============================================
+        function renderStudios() {
+            const grid = $('#studiosGrid');
+            
+            grid.innerHTML = CONFIG.STUDIOS.map((studio, index) => `
+                <div class="studio-card card p-6 cursor-pointer animate-fadeIn opacity-0" 
+                     onclick="selectStudio('${studio.id}')"
+                     style="animation-delay: ${index * 0.1}s; animation-fill-mode: forwards">
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-${studio.color}-500/20 to-${studio.color}-500/5 flex items-center justify-center mb-4">
+                        <i data-lucide="${studio.icon}" class="w-7 h-7 text-${studio.color}-400"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-1">${studio.name}</h3>
+                    <p class="text-gray-400 text-sm mb-3">${studio.description}</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-2xl font-bold gradient-text">RM ${studio.price}</span>
+                        <span class="text-gray-500 text-sm">/ hour</span>
+                    </div>
+                </div>
+            `).join('');
+            
+            lucide.createIcons();
+        }
+
+        function selectStudio(studioId) {
+            state.selectedStudio = CONFIG.STUDIOS.find(s => s.id === studioId);
+            $('#studioSelect').value = studioId;
+            updatePricing();
+            scrollToStudios();
+        }
+
+        // ============================================
+        // Booking Form
+        // ============================================
+        function initBookingForm() {
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            $('#dateSelect').min = today;
+            $('#dateSelect').value = today;
+            
+            // Generate time slots
+            const timeSelect = $('#timeSelect');
+            for (let hour = 0; hour < 24; hour++) {
+                const time24 = `${hour.toString().padStart(2, '0')}:00`;
+                const time12 = formatTime(time24);
+                timeSelect.innerHTML += `<option value="${time24}">${time12}</option>`;
+            }
+            
+            // Set default to 9 AM
+            timeSelect.value = '09:00';
+            
+            // Add event listeners
+            $('#studioSelect').addEventListener('change', updatePricing);
+            $('#durationSelect').addEventListener('change', updatePricing);
+            
+            updatePricing();
+        }
+
+        function updatePricing() {
+            const studioId = $('#studioSelect').value;
+            const duration = parseInt($('#durationSelect').value);
+            const studio = CONFIG.STUDIOS.find(s => s.id === studioId);
+            
+            const subtotal = studio.price * duration;
+            const serviceFee = subtotal * (CONFIG.SERVICE_FEE_PERCENT / 100);
+            const total = subtotal + serviceFee;
+            
+            $('#subtotal').textContent = formatCurrency(subtotal);
+            $('#serviceFee').textContent = formatCurrency(serviceFee);
+            $('#total').textContent = formatCurrency(total);
+        }
+
+        // ============================================
+        // Form Submissions
+        // ============================================
+        function initForms() {
+            $('#bookingForm').addEventListener('submit', handleBookingSubmit);
+            $('#signinForm').addEventListener('submit', handleSigninSubmit);
+            $('#registerForm').addEventListener('submit', handleRegisterSubmit);
+        }
+
+        async function handleBookingSubmit(e) {
+            e.preventDefault();
+            
+            if (!state.user) {
+                openAuthModal();
+                showToast('Please sign in to make a booking', 'warning');
+                return;
+            }
+            
+            const studioId = $('#studioSelect').value;
+            const date = $('#dateSelect').value;
+            const time = $('#timeSelect').value;
+            const duration = parseInt($('#durationSelect').value);
+            const studio = CONFIG.STUDIOS.find(s => s.id === studioId);
+            
+            const subtotal = studio.price * duration;
+            const serviceFee = subtotal * (CONFIG.SERVICE_FEE_PERCENT / 100);
+            const total = subtotal + serviceFee;
+            
+            openConfirmModal(
+                'Confirm Booking',
+                `Book ${studio.name} on ${formatDate(date)} at ${formatTime(time)} for ${duration} hour(s)? Total: ${formatCurrency(total)}`,
+                async () => {
+                    setLoading(true);
+                    
+                    // Simulate API call
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+                    
+                    // Add booking to state
+                    const booking = {
+                        id: Date.now(),
+                        studioId,
+                        studioName: studio.name,
+                        date,
+                        time,
+                        duration,
+                        total,
+                        status: 'confirmed',
+                        createdAt: new Date().toISOString()
+                    };
+                    
+                    state.bookings.unshift(booking);
+                    renderBookings();
+                    
+                    setLoading(false);
+                    showToast('Booking confirmed! Check your email for details.', 'success');
+                    
+                    // Show dashboard
+                    $('#dashboard').classList.remove('hidden');
+                    $('#dashboard').scrollIntoView({ behavior: 'smooth' });
+                }
+            );
+        }
+
+        async function handleSigninSubmit(e) {
+            e.preventDefault();
+            
+            setLoading(true);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Simulate successful login
+            state.user = {
+                id: 1,
+                name: 'John Doe',
+                email: e.target.querySelector('input[type="email"]').value
+            };
+            
+            setLoading(false);
+            closeAuthModal();
+            updateAuthUI();
+            showToast('Welcome back!', 'success');
+            
+            // Show dashboard
+            $('#dashboard').classList.remove('hidden');
+        }
+
+        async function handleRegisterSubmit(e) {
+            e.preventDefault();
+            
+            const password = e.target.querySelectorAll('input[type="password"]');
+            if (password[0].value !== password[1].value) {
+                showToast('Passwords do not match', 'error');
+                return;
+            }
+            
+            setLoading(true);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Simulate successful registration
+            state.user = {
+                id: 1,
+                name: e.target.querySelector('input[type="text"]').value,
+                email: e.target.querySelector('input[type="email"]').value
+            };
+            
+            setLoading(false);
+            closeAuthModal();
+            updateAuthUI();
+            showToast('Account created successfully!', 'success');
+            
+            // Show dashboard
+            $('#dashboard').classList.remove('hidden');
+        }
+
+        // ============================================
+        // Dashboard
+        // ============================================
+        function renderBookings() {
+            const list = $('#bookingsList');
+            
+            if (state.bookings.length === 0) {
+                list.innerHTML = `
+                    <div class="glass rounded-2xl p-12 text-center">
+                        <div class="w-20 h-20 mx-auto rounded-full bg-gray-800 flex items-center justify-center mb-4">
+                            <i data-lucide="calendar-x" class="w-10 h-10 text-gray-600"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">No bookings yet</h3>
+                        <p class="text-gray-400 mb-6">Start by booking your first studio session</p>
+                        <button onclick="scrollToStudios()" class="btn-primary px-6 py-3 rounded-xl font-medium">
+                            Book Now
+                        </button>
+                    </div>
+                `;
+            } else {
+                list.innerHTML = state.bookings.map(booking => {
+                    const studio = CONFIG.STUDIOS.find(s => s.id === booking.studioId);
+                    return `
+                        <div class="card p-6 animate-fadeIn">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-${studio?.color || 'purple'}-500/20 to-${studio?.color || 'purple'}-500/5 flex items-center justify-center">
+                                        <i data-lucide="${studio?.icon || 'calendar'}" class="w-7 h-7 text-${studio?.color || 'purple'}-400"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold">${booking.studioName}</h4>
+                                        <p class="text-gray-400 text-sm">${formatDate(booking.date)} at ${formatTime(booking.time)}</p>
+                                        <p class="text-gray-500 text-sm">${booking.duration} hour(s)</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <div class="text-right">
+                                        <div class="font-bold gradient-text">${formatCurrency(booking.total)}</div>
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                                            booking.status === 'confirmed' ? 'bg-green-500/20 text-green-400' :
+                                            booking.status === 'pending' ? 'bg-yellow-500/20 text-yellow-400' :
+                                            'bg-red-500/20 text-red-400'
+                                        }">
+                                            ${booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
+                                        </span>
+                                    </div>
+                                    <button onclick="cancelBooking(${booking.id})" class="p-2 text-gray-400 hover:text-red-400 transition-colors">
+                                        <i data-lucide="trash-2" class="w-5 h-5"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            lucide.createIcons();
+        }
+
+        function cancelBooking(bookingId) {
+            openConfirmModal(
+                'Cancel Booking',
+                'Are you sure you want to cancel this booking? This action cannot be undone.',
+                () => {
+                    state.bookings = state.bookings.filter(b => b.id !== bookingId);
+                    renderBookings();
+                    showToast('Booking cancelled', 'success');
+                }
+            );
+        }
+
+        // ============================================
+        // Auth UI
+        // ============================================
+        function updateAuthUI() {
+            const authBtn = $('#authBtn');
+            
+            if (state.user) {
+                authBtn.innerHTML = `
+                    <i data-lucide="user" class="w-4 h-4"></i>
+                    <span>${state.user.name.split(' ')[0]}</span>
+                `;
+                authBtn.onclick = () => signOut();
+            } else {
+                authBtn.innerHTML = `
+                    <i data-lucide="log-in" class="w-4 h-4"></i>
+                    <span>Sign In</span>
+                `;
+                authBtn.onclick = openAuthModal;
+            }
+            
+            lucide.createIcons();
+        }
+
+        function signOut() {
+            openConfirmModal(
+                'Sign Out',
+                'Are you sure you want to sign out?',
+                () => {
+                    state.user = null;
+                    state.bookings = [];
+                    updateAuthUI();
+                    $('#dashboard').classList.add('hidden');
+                    renderBookings();
+                    showToast('Signed out successfully', 'success');
+                }
+            );
+        }
+
+        // ============================================
+        // Scroll Effects
+        // ============================================
+        function initScrollEffects() {
+            window.addEventListener('scroll', () => {
+                const navbar = $('#navbar');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('shadow-lg');
+                } else {
+                    navbar.classList.remove('shadow-lg');
+                }
+            });
+        }
+
+        // ============================================
+        // Initialize App
+        // ============================================
+        function init() {
+            // Initialize Lucide icons
+            lucide.createIcons();
+            
+            // Render components
+            renderStudios();
+            renderBookings();
+            
+            // Initialize forms
+            initBookingForm();
+            initForms();
+            
+            // Initialize effects
+            initScrollEffects();
+            
+            // Update auth UI
+            updateAuthUI();
+            
+            console.log('🎬 Leish Studio initialized successfully!');
+        }
+
+        // Run on DOM ready
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

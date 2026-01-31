@@ -1,0 +1,11 @@
+﻿HitPay Webhook Configuration
+============================
+Webhook URL: https://zpsjsbrssadvwrlgggev.supabase.co/functions/v1/payment-webhook
+
+Supabase Secrets:
+HITPAY_SALT=JDJ5JDEwJEhmTy5iT0l0MC5IUDZOOGFqdFc4TC5TUkdZbDd1dFcucFAvV3Avd3FTZkxjQ0ZjZGhoS09l
+SUPABASE_URL=https://zpsjsbrssadvwrlgggev.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=[get from Project Settings â†’ API]
+
+HitPay Dashboard:
+https://dashboard.hitpayapp.com/settings/api-keys

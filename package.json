@@ -1,0 +1,9 @@
+﻿{
+  "name": "leish-optimized",
+  "scripts": {
+    "deploy": "wrangler pages deploy frontend --project-name=leish-optimized"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}
