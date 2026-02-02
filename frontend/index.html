@@ -46,6 +46,9 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <style>
         * {
             margin: 0;
@@ -666,6 +669,66 @@
         };
 
         // ============================================
+        // Supabase Client Initialization
+        // ============================================
+        let supabaseClient = null;
+
+        function initSupabase() {
+            const { createClient } = supabase;
+            supabaseClient = createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+            
+            // Listen for auth state changes
+            supabaseClient.auth.onAuthStateChange((event, session) => {
+                console.log('Auth state changed:', event, session);
+                
+                if (session?.user) {
+                    // User is signed in
+                    state.user = {
+                        id: session.user.id,
+                        name: session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'User',
+                        email: session.user.email,
+                        avatar: session.user.user_metadata?.avatar_url || null
+                    };
+                    
+                    closeAuthModal();
+                    updateAuthUI();
+                    showToast(`Welcome ${state.user.name}!`, 'success');
+                    
+                    // Show dashboard
+                    $('#dashboard').classList.remove('hidden');
+                } else if (event === 'SIGNED_OUT') {
+                    // User signed out
+                    state.user = null;
+                    state.bookings = [];
+                    updateAuthUI();
+                    $('#dashboard').classList.add('hidden');
+                    renderBookings();
+                }
+            });
+            
+            // Check for existing session
+            checkSession();
+        }
+
+        async function checkSession() {
+            try {
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                if (session?.user) {
+                    state.user = {
+                        id: session.user.id,
+                        name: session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'User',
+                        email: session.user.email,
+                        avatar: session.user.user_metadata?.avatar_url || null
+                    };
+                    updateAuthUI();
+                    $('#dashboard').classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Session check error:', error);
+            }
+        }
+
+        // ============================================
         // Utility Functions
         // ============================================
         function $(selector) {
@@ -775,7 +838,31 @@
         }
 
         async function signInWithGoogle() {
-            showToast('Google sign-in would be implemented with Supabase Auth', 'info');
+            try {
+                setLoading(true);
+                
+                // Sign in with Google OAuth
+                const { data, error } = await supabaseClient.auth.signInWithOAuth({
+                    provider: 'google',
+                    options: {
+                        redirectTo: window.location.origin,
+                        queryParams: {
+                            access_type: 'offline',
+                            prompt: 'consent'
+                        }
+                    }
+                });
+                
+                if (error) throw error;
+                
+                // OAuth will redirect, so this won't typically execute
+                showToast('Redirecting to Google...', 'info');
+                
+            } catch (error) {
+                console.error('Google sign-in error:', error);
+                showToast('Failed to sign in with Google. Please try again.', 'error');
+                setLoading(false);
+            }
         }
 
         // ============================================
@@ -965,51 +1052,73 @@
         async function handleSigninSubmit(e) {
             e.preventDefault();
             
+            const email = e.target.querySelector('input[type="email"]').value;
+            const password = e.target.querySelector('input[type="password"]').value;
+            
             setLoading(true);
-            await new Promise(resolve => setTimeout(resolve, 1000));
             
-            // Simulate successful login
-            state.user = {
-                id: 1,
-                name: 'John Doe',
-                email: e.target.querySelector('input[type="email"]').value
-            };
-            
-            setLoading(false);
-            closeAuthModal();
-            updateAuthUI();
-            showToast('Welcome back!', 'success');
-            
-            // Show dashboard
-            $('#dashboard').classList.remove('hidden');
+            try {
+                const { data, error } = await supabaseClient.auth.signInWithPassword({
+                    email,
+                    password
+                });
+                
+                if (error) throw error;
+                
+                // Auth state change will handle the rest
+                setLoading(false);
+                
+            } catch (error) {
+                console.error('Sign in error:', error);
+                setLoading(false);
+                showToast(error.message || 'Failed to sign in. Please check your credentials.', 'error');
+            }
         }
 
         async function handleRegisterSubmit(e) {
             e.preventDefault();
             
+            const name = e.target.querySelector('input[type="text"]').value;
+            const email = e.target.querySelector('input[type="email"]').value;
             const password = e.target.querySelectorAll('input[type="password"]');
+            
             if (password[0].value !== password[1].value) {
                 showToast('Passwords do not match', 'error');
                 return;
             }
             
             setLoading(true);
-            await new Promise(resolve => setTimeout(resolve, 1000));
             
-            // Simulate successful registration
-            state.user = {
-                id: 1,
-                name: e.target.querySelector('input[type="text"]').value,
-                email: e.target.querySelector('input[type="email"]').value
-            };
-            
-            setLoading(false);
-            closeAuthModal();
-            updateAuthUI();
-            showToast('Account created successfully!', 'success');
-            
-            // Show dashboard
-            $('#dashboard').classList.remove('hidden');
+            try {
+                const { data, error } = await supabaseClient.auth.signUp({
+                    email: email,
+                    password: password[0].value,
+                    options: {
+                        data: {
+                            full_name: name
+                        }
+                    }
+                });
+                
+                if (error) throw error;
+                
+                setLoading(false);
+                
+                if (data?.user?.identities?.length === 0) {
+                    // User already exists
+                    showToast('An account with this email already exists. Please sign in.', 'warning');
+                    switchAuthTab('signin');
+                } else {
+                    // Check if email confirmation is required
+                    showToast('Account created! Please check your email to verify your account.', 'success');
+                    closeAuthModal();
+                }
+                
+            } catch (error) {
+                console.error('Registration error:', error);
+                setLoading(false);
+                showToast(error.message || 'Failed to create account. Please try again.', 'error');
+            }
         }
 
         // ============================================
@@ -1110,13 +1219,20 @@
             openConfirmModal(
                 'Sign Out',
                 'Are you sure you want to sign out?',
-                () => {
-                    state.user = null;
-                    state.bookings = [];
-                    updateAuthUI();
-                    $('#dashboard').classList.add('hidden');
-                    renderBookings();
-                    showToast('Signed out successfully', 'success');
+                async () => {
+                    setLoading(true);
+                    
+                    try {
+                        const { error } = await supabaseClient.auth.signOut();
+                        if (error) throw error;
+                        
+                        showToast('Signed out successfully', 'success');
+                    } catch (error) {
+                        console.error('Sign out error:', error);
+                        showToast('Failed to sign out', 'error');
+                    } finally {
+                        setLoading(false);
+                    }
                 }
             );
         }
@@ -1139,6 +1255,9 @@
         // Initialize App
         // ============================================
         function init() {
+            // Initialize Supabase
+            initSupabase();
+            
             // Initialize Lucide icons
             lucide.createIcons();
             
