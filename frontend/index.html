@@ -158,6 +158,18 @@
             border-color: rgba(255, 255, 255, 0.3);
         }
         
+        .btn-disabled {
+            background: rgba(100, 100, 100, 0.3);
+            border: 1px solid rgba(100, 100, 100, 0.4);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        
+        .btn-disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        
         /* Card Styles */
         .card {
             background: rgba(255, 255, 255, 0.05);
@@ -170,6 +182,17 @@
             background: rgba(255, 255, 255, 0.08);
             border-color: rgba(124, 58, 237, 0.3);
             transform: translateY(-4px);
+        }
+        
+        .card.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .card.disabled:hover {
+            transform: none;
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
         }
         
         /* Form Styles */
@@ -213,7 +236,6 @@
         .studio-card:nth-child(1) { animation-delay: 0.1s; }
         .studio-card:nth-child(2) { animation-delay: 0.2s; }
         .studio-card:nth-child(3) { animation-delay: 0.3s; }
-        .studio-card:nth-child(4) { animation-delay: 0.4s; }
         
         /* Toast Notifications */
         .toast {
@@ -222,6 +244,22 @@
         
         @keyframes fadeOut {
             to { opacity: 0; transform: translateX(100px); }
+        }
+        
+        /* Coming Soon Badge */
+        .coming-soon-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: linear-gradient(135deg, #f97316, #fb923c);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
         }
         
         /* Responsive Adjustments */
@@ -318,8 +356,8 @@
                         <div class="text-gray-400 text-sm mt-1">Availability</div>
                     </div>
                     <div class="glass rounded-2xl p-6 animate-fadeIn" style="animation-delay: 0.5s">
-                        <div class="text-3xl font-bold gradient-text">4</div>
-                        <div class="text-gray-400 text-sm mt-1">Studio Types</div>
+                        <div class="text-3xl font-bold gradient-text">3</div>
+                        <div class="text-gray-400 text-sm mt-1">Studio Spaces</div>
                     </div>
                 </div>
             </div>
@@ -369,7 +407,7 @@
                     <p class="text-gray-400 max-w-xl mx-auto">Choose the perfect space for your project</p>
                 </div>
                 
-                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6" id="studiosGrid">
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" id="studiosGrid">
                     <!-- Studios will be loaded dynamically -->
                 </div>
             </div>
@@ -389,10 +427,9 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-300 mb-2">Studio Type</label>
                                 <select id="studioSelect" class="input-field w-full px-4 py-3 rounded-xl text-white">
-                                    <option value="podcast">Podcast Studio - RM 50/hr</option>
-                                    <option value="video">Video Studio - RM 75/hr</option>
-                                    <option value="photo">Photo Studio - RM 60/hr</option>
-                                    <option value="music">Music Studio - RM 80/hr</option>
+                                    <option value="station-a">Station A - RM 50/hr</option>
+                                    <option value="station-b">Station B - RM 50/hr</option>
+                                    <option value="studio" disabled>Studio - Coming Soon</option>
                                 </select>
                             </div>
                             
@@ -612,10 +649,9 @@
             HITPAY_API_KEY: '95bfb1c380f495378c50dcf0e90f66dd1b71529ba7df497a9f51f04801c2aae8',
             SERVICE_FEE_PERCENT: 10,
             STUDIOS: [
-                { id: 'podcast', name: 'Podcast Studio', price: 50, icon: 'mic', color: 'purple', description: 'Professional audio recording setup' },
-                { id: 'video', name: 'Video Studio', price: 75, icon: 'video', color: 'pink', description: 'Full video production suite' },
-                { id: 'photo', name: 'Photo Studio', price: 60, icon: 'camera', color: 'blue', description: 'Complete photography setup' },
-                { id: 'music', name: 'Music Studio', price: 80, icon: 'music', color: 'orange', description: 'Sound-treated recording room' }
+                { id: 'station-a', name: 'Station A', price: 50, icon: 'radio', color: 'purple', description: 'Professional recording station', available: true },
+                { id: 'station-b', name: 'Station B', price: 50, icon: 'mic-2', color: 'pink', description: 'Professional recording station', available: true },
+                { id: 'studio', name: 'Studio', price: 0, icon: 'building-2', color: 'orange', description: 'Full production studio', available: false }
             ]
         };
 
@@ -773,17 +809,22 @@
             const grid = $('#studiosGrid');
             
             grid.innerHTML = CONFIG.STUDIOS.map((studio, index) => `
-                <div class="studio-card card p-6 cursor-pointer animate-fadeIn opacity-0" 
-                     onclick="selectStudio('${studio.id}')"
+                <div class="studio-card card p-6 ${studio.available ? 'cursor-pointer' : 'disabled'} animate-fadeIn opacity-0 relative" 
+                     ${studio.available ? `onclick="selectStudio('${studio.id}')"` : ''}
                      style="animation-delay: ${index * 0.1}s; animation-fill-mode: forwards">
+                    ${!studio.available ? '<span class="coming-soon-badge">Coming Soon</span>' : ''}
                     <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-${studio.color}-500/20 to-${studio.color}-500/5 flex items-center justify-center mb-4">
                         <i data-lucide="${studio.icon}" class="w-7 h-7 text-${studio.color}-400"></i>
                     </div>
                     <h3 class="text-lg font-semibold mb-1">${studio.name}</h3>
                     <p class="text-gray-400 text-sm mb-3">${studio.description}</p>
                     <div class="flex items-center justify-between">
-                        <span class="text-2xl font-bold gradient-text">RM ${studio.price}</span>
-                        <span class="text-gray-500 text-sm">/ hour</span>
+                        ${studio.available ? `
+                            <span class="text-2xl font-bold gradient-text">RM ${studio.price}</span>
+                            <span class="text-gray-500 text-sm">/ hour</span>
+                        ` : `
+                            <span class="text-gray-500 text-sm">Availability TBA</span>
+                        `}
                     </div>
                 </div>
             `).join('');
@@ -792,7 +833,13 @@
         }
 
         function selectStudio(studioId) {
-            state.selectedStudio = CONFIG.STUDIOS.find(s => s.id === studioId);
+            const studio = CONFIG.STUDIOS.find(s => s.id === studioId);
+            if (!studio.available) {
+                showToast('This studio is not available yet', 'warning');
+                return;
+            }
+            
+            state.selectedStudio = studio;
             $('#studioSelect').value = studioId;
             updatePricing();
             scrollToStudios();
@@ -830,6 +877,13 @@
             const duration = parseInt($('#durationSelect').value);
             const studio = CONFIG.STUDIOS.find(s => s.id === studioId);
             
+            if (!studio || !studio.available) {
+                $('#subtotal').textContent = 'N/A';
+                $('#serviceFee').textContent = 'N/A';
+                $('#total').textContent = 'N/A';
+                return;
+            }
+            
             const subtotal = studio.price * duration;
             const serviceFee = subtotal * (CONFIG.SERVICE_FEE_PERCENT / 100);
             const total = subtotal + serviceFee;
@@ -851,17 +905,23 @@
         async function handleBookingSubmit(e) {
             e.preventDefault();
             
+            const studioId = $('#studioSelect').value;
+            const studio = CONFIG.STUDIOS.find(s => s.id === studioId);
+            
+            if (!studio.available) {
+                showToast('This studio is not available for booking yet', 'warning');
+                return;
+            }
+            
             if (!state.user) {
                 openAuthModal();
                 showToast('Please sign in to make a booking', 'warning');
                 return;
             }
             
-            const studioId = $('#studioSelect').value;
             const date = $('#dateSelect').value;
             const time = $('#timeSelect').value;
             const duration = parseInt($('#durationSelect').value);
-            const studio = CONFIG.STUDIOS.find(s => s.id === studioId);
             
             const subtotal = studio.price * duration;
             const serviceFee = subtotal * (CONFIG.SERVICE_FEE_PERCENT / 100);
