@@ -1,22 +1,25 @@
-// index.html with logo, gallery and payment updates
+//index.html chatgptopus - update fix broken images 
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Leish Studio - Professional studio booking for podcasts, interviews, and content creation">
-    <meta name="theme-color" content="#7c3aed">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Leish Studio - Professional studio booking for podcasts, interviews, and content creation" />
+    <meta name="theme-color" content="#7c3aed" />
     <title>Leish Studio - Professional Studio Booking</title>
-    
+
+    <!-- Helps relative asset URLs behave consistently -->
+    <base href="./" />
+
     <!-- Preconnect for performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -24,234 +27,99 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        sans: ["Inter", "system-ui", "sans-serif"],
                     },
                     colors: {
                         primary: {
-                            50: '#faf5ff',
-                            100: '#f3e8ff',
-                            200: '#e9d5ff',
-                            300: '#d8b4fe',
-                            400: '#c084fc',
-                            500: '#a855f7',
-                            600: '#9333ea',
-                            700: '#7c3aed',
-                            800: '#6b21a8',
-                            900: '#581c87',
-                        }
-                    }
-                }
-            }
-        }
+                            50: "#faf5ff",
+                            100: "#f3e8ff",
+                            200: "#e9d5ff",
+                            300: "#d8b4fe",
+                            400: "#c084fc",
+                            500: "#a855f7",
+                            600: "#9333ea",
+                            700: "#7c3aed",
+                            800: "#6b21a8",
+                            900: "#581c87",
+                        },
+                    },
+                },
+            },
+        };
     </script>
-    
+
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    
+
     <!-- Supabase Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        html {
-            scroll-behavior: smooth;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body {
-            font-family: 'Inter', system-ui, sans-serif;
+            font-family: "Inter", system-ui, sans-serif;
             background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
             min-height: 100vh;
             color: #fff;
         }
-        
-        /* Loading States */
         .skeleton {
             background: linear-gradient(90deg, #2d2d3a 25%, #3d3d4a 50%, #2d2d3a 75%);
             background-size: 200% 100%;
             animation: skeleton-loading 1.5s infinite;
         }
-        
-        @keyframes skeleton-loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-        
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-20px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        
-        .animate-fadeIn {
-            animation: fadeIn 0.5s ease-out forwards;
-        }
-        
-        .animate-slideIn {
-            animation: slideIn 0.3s ease-out forwards;
-        }
-        
-        .animate-float {
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        /* Glass Morphism */
-        .glass {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .glass-dark {
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        /* Gradient Text */
+        @keyframes skeleton-loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .animate-fadeIn { animation: fadeIn 0.5s ease-out forwards; }
+        .animate-slideIn { animation: slideIn 0.3s ease-out forwards; }
+        .animate-float { animation: float 3s ease-in-out infinite; }
+        .glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+        .glass-dark { background: rgba(0,0,0,0.3); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); }
         .gradient-text {
             background: linear-gradient(135deg, #a855f7, #ec4899, #f97316);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
-        /* Button Styles */
         .btn-primary {
             background: linear-gradient(135deg, #7c3aed, #a855f7);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 40px rgba(124, 58, 237, 0.4);
-        }
-        
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-        
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-        }
-        
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-        
-        .btn-disabled {
-            background: rgba(100, 100, 100, 0.3);
-            border: 1px solid rgba(100, 100, 100, 0.4);
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-        
-        .btn-disabled:hover {
-            transform: none;
-            box-shadow: none;
-        }
-        
-        /* Card Styles */
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 40px rgba(124,58,237,0.4); }
+        .btn-primary:active { transform: translateY(0); }
+        .btn-secondary { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); transition: all 0.3s ease; }
+        .btn-secondary:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); }
+        .btn-disabled { background: rgba(100,100,100,0.3); border: 1px solid rgba(100,100,100,0.4); cursor: not-allowed; opacity: 0.6; }
+        .btn-disabled:hover { transform: none; box-shadow: none; }
         .card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
             border-radius: 16px;
             transition: all 0.3s ease;
         }
-        
-        .card:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(124, 58, 237, 0.3);
-            transform: translateY(-4px);
-        }
-        
-        .card.disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-        
-        .card.disabled:hover {
-            transform: none;
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-        
-        /* Form Styles */
-        .input-field {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-        
-        .input-field:focus {
-            outline: none;
-            border-color: #7c3aed;
-            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
-        }
-        
-        /* Modal */
-        .modal-overlay {
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(4px);
-        }
-        
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: rgba(124, 58, 237, 0.5);
-            border-radius: 4px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(124, 58, 237, 0.7);
-        }
-        
-        /* Studio Card Animation Delays */
+        .card:hover { background: rgba(255,255,255,0.08); border-color: rgba(124,58,237,0.3); transform: translateY(-4px); }
+        .card.disabled { opacity: 0.6; cursor: not-allowed; }
+        .card.disabled:hover { transform: none; background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); }
+        .input-field { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s ease; }
+        .input-field:focus { outline: none; border-color: #7c3aed; box-shadow: 0 0 0 3px rgba(124,58,237,0.2); }
+        .modal-overlay { background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+        ::-webkit-scrollbar-thumb { background: rgba(124,58,237,0.5); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(124,58,237,0.7); }
+
         .studio-card:nth-child(1) { animation-delay: 0.1s; }
         .studio-card:nth-child(2) { animation-delay: 0.2s; }
         .studio-card:nth-child(3) { animation-delay: 0.3s; }
-        
-        /* Toast Notifications */
-        .toast {
-            animation: slideIn 0.3s ease-out, fadeOut 0.3s ease-out 2.7s forwards;
-        }
-        
-        @keyframes fadeOut {
-            to { opacity: 0; transform: translateX(100px); }
-        }
-        
-        /* Coming Soon Badge */
+
+        .toast { animation: slideIn 0.3s ease-out, fadeOut 0.3s ease-out 2.7s forwards; }
+        @keyframes fadeOut { to { opacity: 0; transform: translateX(100px); } }
+
         .coming-soon-badge {
             position: absolute;
             top: -10px;
@@ -264,19 +132,15 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+            box-shadow: 0 4px 12px rgba(249,115,22,0.4);
         }
-        
-        /* Responsive Adjustments */
+
         @media (max-width: 768px) {
-            .hero-title {
-                font-size: 2.5rem;
-            }
+            .hero-title { font-size: 2.5rem; }
         }
     </style>
 </head>
 <body class="antialiased">
-    <!-- App Container -->
     <div id="app">
         <!-- Navigation -->
         <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 glass-dark">
@@ -284,17 +148,24 @@
                 <div class="flex items-center justify-between h-16">
                     <a href="#" class="flex items-center gap-2">
                         <div class="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center bg-white">
-                            <img src="/mnt/user-data/uploads/Logo_4.png" alt="Leish Studio" class="w-full h-full object-contain">
+                            <!-- FIXED: use served asset path -->
+                            <img
+                                src="assets/Logo_4.png"
+                                alt="Leish Studio"
+                                class="w-full h-full object-contain"
+                                referrerpolicy="no-referrer"
+                                onerror="handleImgError(this)"
+                            />
                         </div>
                         <span class="text-xl font-bold">Leish Studio</span>
                     </a>
-                    
+
                     <div class="hidden md:flex items-center gap-6">
                         <a href="#features" class="text-gray-300 hover:text-white transition-colors">Features</a>
                         <a href="#studios" class="text-gray-300 hover:text-white transition-colors">Studios</a>
                         <a href="#pricing" class="text-gray-300 hover:text-white transition-colors">Pricing</a>
                     </div>
-                    
+
                     <div class="flex items-center gap-3">
                         <button id="authBtn" onclick="openAuthModal()" class="btn-primary px-4 py-2 rounded-lg font-medium flex items-center gap-2">
                             <i data-lucide="log-in" class="w-4 h-4"></i>
@@ -306,8 +177,7 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- Mobile Menu -->
+
             <div id="mobileMenu" class="hidden md:hidden glass-dark border-t border-white/10">
                 <div class="px-4 py-3 space-y-2">
                     <a href="#features" class="block py-2 text-gray-300 hover:text-white">Features</a>
@@ -316,7 +186,7 @@
                 </div>
             </div>
         </nav>
-        
+
         <!-- Hero Section -->
         <section class="pt-32 pb-20 px-4">
             <div class="max-w-7xl mx-auto text-center">
@@ -325,15 +195,15 @@
                         <i data-lucide="sparkles" class="w-4 h-4"></i>
                         Now with instant booking
                     </span>
-                    
+
                     <h1 class="hero-title text-5xl md:text-7xl font-extrabold mb-6">
                         Book Your <span class="gradient-text">Creative Space</span>
                     </h1>
-                    
+
                     <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-10">
                         Professional studio facilities with state-of-the-art equipment. Perfect for podcasts, interviews, and content creation.
                     </p>
-                    
+
                     <div class="flex flex-col sm:flex-row gap-4 justify-center">
                         <button onclick="scrollToStudios()" class="btn-primary px-8 py-4 rounded-xl font-semibold text-lg flex items-center justify-center gap-2">
                             <i data-lucide="calendar" class="w-5 h-5"></i>
@@ -345,7 +215,7 @@
                         </button>
                     </div>
                 </div>
-                
+
                 <!-- Stats -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20">
                     <div class="glass rounded-2xl p-6 animate-fadeIn" style="animation-delay: 0.2s">
@@ -367,7 +237,7 @@
                 </div>
             </div>
         </section>
-        
+
         <!-- Features Section -->
         <section id="features" class="py-20 px-4">
             <div class="max-w-7xl mx-auto">
@@ -375,7 +245,7 @@
                     <h2 class="text-4xl font-bold mb-4">Why Choose <span class="gradient-text">Leish Studio</span></h2>
                     <p class="text-gray-400 max-w-xl mx-auto">Everything you need to create professional content</p>
                 </div>
-                
+
                 <div class="grid md:grid-cols-3 gap-8">
                     <div class="card p-8 text-center animate-fadeIn">
                         <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-purple-500/20 to-purple-500/5 flex items-center justify-center mb-6">
@@ -384,7 +254,7 @@
                         <h3 class="text-xl font-semibold mb-3">Pro Equipment</h3>
                         <p class="text-gray-400">Access to professional cameras, lighting, microphones, and more</p>
                     </div>
-                    
+
                     <div class="card p-8 text-center animate-fadeIn" style="animation-delay: 0.1s">
                         <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-pink-500/20 to-pink-500/5 flex items-center justify-center mb-6">
                             <i data-lucide="zap" class="w-8 h-8 text-pink-400"></i>
@@ -392,7 +262,7 @@
                         <h3 class="text-xl font-semibold mb-3">Instant Booking</h3>
                         <p class="text-gray-400">Real-time availability and instant confirmation for your sessions</p>
                     </div>
-                    
+
                     <div class="card p-8 text-center animate-fadeIn" style="animation-delay: 0.2s">
                         <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-orange-500/20 to-orange-500/5 flex items-center justify-center mb-6">
                             <i data-lucide="wallet" class="w-8 h-8 text-orange-400"></i>
@@ -403,7 +273,7 @@
                 </div>
             </div>
         </section>
-        
+
         <!-- Studios Section -->
         <section id="studios" class="py-20 px-4">
             <div class="max-w-7xl mx-auto">
@@ -411,13 +281,11 @@
                     <h2 class="text-4xl font-bold mb-4">Our <span class="gradient-text">Studios</span></h2>
                     <p class="text-gray-400 max-w-xl mx-auto">Choose the perfect space for your project</p>
                 </div>
-                
-                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" id="studiosGrid">
-                    <!-- Studios will be loaded dynamically -->
-                </div>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" id="studiosGrid"></div>
             </div>
         </section>
-        
+
         <!-- Booking Section -->
         <section id="booking" class="py-20 px-4">
             <div class="max-w-3xl mx-auto">
@@ -426,7 +294,7 @@
                         <h2 class="text-3xl font-bold mb-2">Quick Book</h2>
                         <p class="text-gray-400">Select your studio and time to get started</p>
                     </div>
-                    
+
                     <form id="bookingForm" class="space-y-6">
                         <div class="grid sm:grid-cols-2 gap-6">
                             <div>
@@ -437,21 +305,19 @@
                                     <option value="studio" disabled>Studio - Coming Soon</option>
                                 </select>
                             </div>
-                            
+
                             <div>
                                 <label class="block text-sm font-medium text-gray-300 mb-2">Date</label>
-                                <input type="date" id="dateSelect" class="input-field w-full px-4 py-3 rounded-xl text-white">
+                                <input type="date" id="dateSelect" class="input-field w-full px-4 py-3 rounded-xl text-white" />
                             </div>
                         </div>
-                        
+
                         <div class="grid sm:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-medium text-gray-300 mb-2">Start Time</label>
-                                <select id="timeSelect" class="input-field w-full px-4 py-3 rounded-xl text-white">
-                                    <!-- Times will be generated -->
-                                </select>
+                                <select id="timeSelect" class="input-field w-full px-4 py-3 rounded-xl text-white"></select>
                             </div>
-                            
+
                             <div>
                                 <label class="block text-sm font-medium text-gray-300 mb-2">Duration</label>
                                 <select id="durationSelect" class="input-field w-full px-4 py-3 rounded-xl text-white">
@@ -464,8 +330,7 @@
                                 </select>
                             </div>
                         </div>
-                        
-                        <!-- Price Summary -->
+
                         <div class="glass-dark rounded-xl p-6">
                             <div class="flex justify-between items-center mb-4">
                                 <span class="text-gray-400">Subtotal</span>
@@ -480,17 +345,17 @@
                                 <span id="total" class="text-2xl font-bold gradient-text">RM 55</span>
                             </div>
                         </div>
-                        
+
                         <button type="submit" class="btn-primary w-full py-4 rounded-xl font-semibold text-lg flex items-center justify-center gap-2">
                             <i data-lucide="credit-card" class="w-5 h-5"></i>
-                            Pay & Book (HitPay)
+                            Pay &amp; Book (HitPay)
                         </button>
                     </form>
                 </div>
             </div>
         </section>
-        
-        <!-- Dashboard Section (Hidden by default) -->
+
+        <!-- Dashboard Section -->
         <section id="dashboard" class="py-20 px-4 hidden">
             <div class="max-w-7xl mx-auto">
                 <div class="flex items-center justify-between mb-10">
@@ -503,38 +368,41 @@
                         New Booking
                     </button>
                 </div>
-                
-                <div id="bookingsList" class="grid gap-4">
-                    <!-- Bookings will be loaded dynamically -->
-                </div>
+
+                <div id="bookingsList" class="grid gap-4"></div>
             </div>
         </section>
-        
+
         <!-- Footer -->
         <footer class="py-12 px-4 border-t border-white/10">
             <div class="max-w-7xl mx-auto">
                 <div class="flex flex-col md:flex-row items-center justify-between gap-6">
                     <div class="flex items-center gap-2">
                         <div class="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center bg-white">
-                            <img src="/mnt/user-data/uploads/Logo_4.png" alt="Leish Studio" class="w-full h-full object-contain">
+                            <!-- FIXED -->
+                            <img
+                                src="assets/Logo_4.png"
+                                alt="Leish Studio"
+                                class="w-full h-full object-contain"
+                                referrerpolicy="no-referrer"
+                                onerror="handleImgError(this)"
+                            />
                         </div>
                         <span class="text-xl font-bold">Leish Studio</span>
                     </div>
-                    
+
                     <div class="flex items-center gap-6 text-gray-400 text-sm">
                         <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
                         <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
                         <a href="#" class="hover:text-white transition-colors">Contact</a>
                     </div>
-                    
-                    <div class="text-gray-500 text-sm">
-                        © 2026 Leish Studio. All rights reserved.
-                    </div>
+
+                    <div class="text-gray-500 text-sm">© 2026 Leish Studio. All rights reserved.</div>
                 </div>
             </div>
         </footer>
     </div>
-    
+
     <!-- Auth Modal -->
     <div id="authModal" class="fixed inset-0 z-50 hidden">
         <div class="modal-overlay absolute inset-0" onclick="closeAuthModal()"></div>
@@ -543,55 +411,59 @@
                 <button onclick="closeAuthModal()" class="absolute top-4 right-4 p-2 text-gray-400 hover:text-white transition-colors">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
-                
+
                 <div class="text-center mb-8">
                     <div class="w-16 h-16 mx-auto rounded-2xl overflow-hidden flex items-center justify-center bg-white mb-4">
-                        <img src="/mnt/user-data/uploads/Logo_4.png" alt="Leish Studio" class="w-full h-full object-contain p-2">
+                        <!-- FIXED -->
+                        <img
+                            src="assets/Logo_4.png"
+                            alt="Leish Studio"
+                            class="w-full h-full object-contain p-2"
+                            referrerpolicy="no-referrer"
+                            onerror="handleImgError(this)"
+                        />
                     </div>
                     <h3 class="text-2xl font-bold">Welcome to Leish Studio</h3>
                     <p class="text-gray-400 mt-2">Sign in or create an account to start booking</p>
                 </div>
-                
-                <!-- Auth Tabs -->
+
                 <div class="flex gap-2 mb-6">
                     <button onclick="switchAuthTab('signin')" id="signinTab" class="flex-1 py-3 rounded-xl font-medium transition-all bg-purple-600">Sign In</button>
                     <button onclick="switchAuthTab('register')" id="registerTab" class="flex-1 py-3 rounded-xl font-medium transition-all text-gray-400 hover:text-white">Register</button>
                 </div>
-                
-                <!-- Sign In Form -->
+
                 <form id="signinForm" class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-2">Email</label>
-                        <input type="email" class="input-field w-full px-4 py-3 rounded-xl text-white" placeholder="your@email.com" required>
+                        <input type="email" class="input-field w-full px-4 py-3 rounded-xl text-white" placeholder="your@email.com" required />
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-2">Password</label>
-                        <input type="password" class="input-field w-full px-4 py-3 rounded-xl text-white" placeholder="••••••••" required>
+                        <input type="password" class="input-field w-full px-4 py-3 rounded-xl text-white" placeholder="••••••••" required />
                     </div>
                     <button type="submit" class="btn-primary w-full py-3 rounded-xl font-semibold">Sign In</button>
                 </form>
-                
-                <!-- Register Form -->
+
                 <form id="registerForm" class="space-y-4 hidden">
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-2">Full Name</label>
-                        <input type="text" class="input-field w-full px-4 py-3 rounded-xl text-white" placeholder="John Doe" required>
+                        <input type="text" class="input-field w-full px-4 py-3 rounded-xl text-white" placeholder="John Doe" required />
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-2">Email</label>
-                        <input type="email" class="input-field w-full px-4 py-3 rounded-xl text-white" placeholder="your@email.com" required>
+                        <input type="email" class="input-field w-full px-4 py-3 rounded-xl text-white" placeholder="your@email.com" required />
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-2">Password</label>
-                        <input type="password" class="input-field w-full px-4 py-3 rounded-xl text-white" placeholder="••••••••" required>
+                        <input type="password" class="input-field w-full px-4 py-3 rounded-xl text-white" placeholder="••••••••" required />
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-2">Confirm Password</label>
-                        <input type="password" class="input-field w-full px-4 py-3 rounded-xl text-white" placeholder="••••••••" required>
+                        <input type="password" class="input-field w-full px-4 py-3 rounded-xl text-white" placeholder="••••••••" required />
                     </div>
                     <button type="submit" class="btn-primary w-full py-3 rounded-xl font-semibold">Create Account</button>
                 </form>
-                
+
                 <div class="relative my-6">
                     <div class="absolute inset-0 flex items-center">
                         <div class="w-full border-t border-white/10"></div>
@@ -600,7 +472,7 @@
                         <span class="px-4 bg-transparent text-gray-400">or</span>
                     </div>
                 </div>
-                
+
                 <button onclick="signInWithGoogle()" class="btn-secondary w-full py-3 rounded-xl font-medium flex items-center justify-center gap-3">
                     <svg class="w-5 h-5" viewBox="0 0 24 24">
                         <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -610,14 +482,16 @@
                     </svg>
                     Continue with Google
                 </button>
-                
+
                 <p class="text-center text-sm text-gray-500 mt-6">
-                    By signing in, you agree to our <a href="#" class="text-purple-400 hover:underline">Terms of Service</a> and <a href="#" class="text-purple-400 hover:underline">Privacy Policy</a>
+                    By signing in, you agree to our
+                    <a href="#" class="text-purple-400 hover:underline">Terms of Service</a> and
+                    <a href="#" class="text-purple-400 hover:underline">Privacy Policy</a>
                 </p>
             </div>
         </div>
     </div>
-    
+
     <!-- Confirm Modal -->
     <div id="confirmModal" class="fixed inset-0 z-50 hidden">
         <div class="modal-overlay absolute inset-0" onclick="closeConfirmModal()"></div>
@@ -632,11 +506,9 @@
             </div>
         </div>
     </div>
-    
-    <!-- Toast Container -->
+
     <div id="toastContainer" class="fixed top-20 right-4 z-50 space-y-3"></div>
-    
-    <!-- Loading Overlay -->
+
     <div id="loadingOverlay" class="fixed inset-0 z-50 hidden modal-overlay flex items-center justify-center">
         <div class="text-center">
             <div class="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -645,70 +517,92 @@
     </div>
 
     <script>
-        // ============================================
+        // ============================================================
+        // Image fallback for missing assets (prevents broken icons)
+        // ============================================================
+        const FALLBACK_IMG =
+            'data:image/svg+xml;charset=utf-8,' +
+            encodeURIComponent(`
+            <svg xmlns="http://www.w3.org/2000/svg" width="800" height="800">
+              <defs>
+                <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#7c3aed"/>
+                  <stop offset="0.5" stop-color="#ec4899"/>
+                  <stop offset="1" stop-color="#f97316"/>
+                </linearGradient>
+              </defs>
+              <rect width="100%" height="100%" fill="#0f0f1a"/>
+              <circle cx="400" cy="400" r="320" fill="url(#g)" opacity="0.18"/>
+              <rect x="160" y="220" width="480" height="360" rx="28" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)"/>
+              <path d="M240 520l120-140 90 110 70-80 140 160H240z" fill="rgba(255,255,255,0.22)"/>
+              <circle cx="540" cy="330" r="40" fill="rgba(255,255,255,0.18)"/>
+              <text x="50%" y="70%" text-anchor="middle" fill="rgba(255,255,255,0.55)" font-family="Inter, Arial" font-size="26">
+                Image not found
+              </text>
+            </svg>
+        `);
+
+        function handleImgError(imgEl) {
+            if (!imgEl || imgEl.dataset.fallbackApplied === "1") return;
+            imgEl.dataset.fallbackApplied = "1";
+            imgEl.src = FALLBACK_IMG;
+        }
+
+        // ============================================================
         // Configuration
-        // ============================================
+        // ============================================================
         const CONFIG = {
-            SUPABASE_URL: 'https://efrsxprokebsvbvgmhop.supabase.co',
-            SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmcnN4cHJva2Vic3ZidmdtaG9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkxNzMwNzIsImV4cCI6MjA4NDc0OTA3Mn0.1wvsqEMx2MoFo1EDOjbcj_VExsvWZYq3onv68JW7Z0A',
-            HITPAY_API_KEY: '95bfb1c380f495378c50dcf0e90f66dd1b71529ba7df497a9f51f04801c2aae8',
+            SUPABASE_URL: "https://efrsxprokebsvbvgmhop.supabase.co",
+            SUPABASE_ANON_KEY:
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmcnN4cHJva2Vic3ZidmdtaG9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkxNzMwNzIsImV4cCI6MjA4NDc0OTA3Mn0.1wvsqEMx2MoFo1EDOjbcj_VExsvWZYq3onv68JW7Z0A",
+            HITPAY_API_KEY: "95bfb1c380f495378c50dcf0e90f66dd1b71529ba7df497a9f51f04801c2aae8",
             SERVICE_FEE_PERCENT: 10,
             STUDIOS: [
-                { id: 'station-a', name: 'Station A', price: 50, icon: 'radio', color: 'purple', description: 'Professional recording station', available: true },
-                { id: 'station-b', name: 'Station B', price: 50, icon: 'mic-2', color: 'pink', description: 'Professional recording station', available: true },
-                { id: 'studio', name: 'Studio', price: 0, icon: 'building-2', color: 'orange', description: 'Full production studio', available: false }
-            ]
+                { id: "station-a", name: "Station A", price: 50, icon: "radio", color: "purple", description: "Professional recording station", available: true },
+                { id: "station-b", name: "Station B", price: 50, icon: "mic-2", color: "pink", description: "Professional recording station", available: true },
+                { id: "studio", name: "Studio", price: 0, icon: "building-2", color: "orange", description: "Full production studio", available: false },
+            ],
         };
 
-        // ============================================
+        // ============================================================
         // State Management
-        // ============================================
-        const state = {
-            user: null,
-            bookings: [],
-            selectedStudio: null,
-            isLoading: false
-        };
+        // ============================================================
+        const state = { user: null, bookings: [], selectedStudio: null, isLoading: false };
 
-        // ============================================
+        // ============================================================
         // Supabase Client Initialization
-        // ============================================
+        // ============================================================
         let supabaseClient = null;
 
         function initSupabase() {
             const { createClient } = supabase;
             supabaseClient = createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
-            
-            // Listen for auth state changes
+
             supabaseClient.auth.onAuthStateChange((event, session) => {
-                console.log('Auth state changed:', event, session);
-                
+                console.log("Auth state changed:", event, session);
+
                 if (session?.user) {
-                    // User is signed in
                     state.user = {
                         id: session.user.id,
-                        name: session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'User',
+                        name: session.user.user_metadata?.full_name || session.user.email?.split("@")[0] || "User",
                         email: session.user.email,
-                        avatar: session.user.user_metadata?.avatar_url || null
+                        avatar: session.user.user_metadata?.avatar_url || null,
                     };
-                    
+
                     closeAuthModal();
                     updateAuthUI();
-                    showToast(`Welcome ${state.user.name}!`, 'success');
-                    
-                    // Show dashboard
-                    $('#dashboard').classList.remove('hidden');
-                } else if (event === 'SIGNED_OUT') {
-                    // User signed out
+                    showToast(`Welcome ${state.user.name}!`, "success");
+
+                    $("#dashboard").classList.remove("hidden");
+                } else if (event === "SIGNED_OUT") {
                     state.user = null;
                     state.bookings = [];
                     updateAuthUI();
-                    $('#dashboard').classList.add('hidden');
+                    $("#dashboard").classList.add("hidden");
                     renderBookings();
                 }
             });
-            
-            // Check for existing session
+
             checkSession();
         }
 
@@ -718,188 +612,132 @@
                 if (session?.user) {
                     state.user = {
                         id: session.user.id,
-                        name: session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'User',
+                        name: session.user.user_metadata?.full_name || session.user.email?.split("@")[0] || "User",
                         email: session.user.email,
-                        avatar: session.user.user_metadata?.avatar_url || null
+                        avatar: session.user.user_metadata?.avatar_url || null,
                     };
                     updateAuthUI();
-                    $('#dashboard').classList.remove('hidden');
+                    $("#dashboard").classList.remove("hidden");
                 }
             } catch (error) {
-                console.error('Session check error:', error);
+                console.error("Session check error:", error);
             }
         }
 
-        // ============================================
-        // Utility Functions
-        // ============================================
-        function $(selector) {
-            return document.querySelector(selector);
-        }
-
-        function $$(selector) {
-            return document.querySelectorAll(selector);
-        }
+        // ============================================================
+        // Utilities
+        // ============================================================
+        function $(selector) { return document.querySelector(selector); }
+        function $$(selector) { return document.querySelectorAll(selector); }
 
         function formatDate(date) {
-            return new Date(date).toLocaleDateString('en-MY', {
-                weekday: 'short',
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            });
+            return new Date(date).toLocaleDateString("en-MY", { weekday: "short", year: "numeric", month: "short", day: "numeric" });
         }
-
         function formatTime(time) {
-            const [hours, minutes] = time.split(':');
-            const hour = parseInt(hours);
-            const ampm = hour >= 12 ? 'PM' : 'AM';
+            const [hours, minutes] = time.split(":");
+            const hour = parseInt(hours, 10);
+            const ampm = hour >= 12 ? "PM" : "AM";
             const displayHour = hour % 12 || 12;
             return `${displayHour}:${minutes} ${ampm}`;
         }
+        function formatCurrency(amount) { return `RM ${amount.toFixed(2)}`; }
 
-        function formatCurrency(amount) {
-            return `RM ${amount.toFixed(2)}`;
-        }
+        // ============================================================
+        // Toast
+        // ============================================================
+        function showToast(message, type = "info") {
+            const container = $("#toastContainer");
+            const toast = document.createElement("div");
 
-        // ============================================
-        // Toast Notifications
-        // ============================================
-        function showToast(message, type = 'info') {
-            const container = $('#toastContainer');
-            const toast = document.createElement('div');
-            
-            const colors = {
-                success: 'bg-green-500',
-                error: 'bg-red-500',
-                warning: 'bg-yellow-500',
-                info: 'bg-purple-500'
-            };
-            
-            const icons = {
-                success: 'check-circle',
-                error: 'x-circle',
-                warning: 'alert-triangle',
-                info: 'info'
-            };
-            
+            const colors = { success: "bg-green-500", error: "bg-red-500", warning: "bg-yellow-500", info: "bg-purple-500" };
+            const icons = { success: "check-circle", error: "x-circle", warning: "alert-triangle", info: "info" };
+
             toast.className = `toast flex items-center gap-3 px-4 py-3 rounded-xl ${colors[type]} text-white shadow-lg`;
-            toast.innerHTML = `
-                <i data-lucide="${icons[type]}" class="w-5 h-5"></i>
-                <span>${message}</span>
-            `;
-            
+            toast.innerHTML = `<i data-lucide="${icons[type]}" class="w-5 h-5"></i><span>${message}</span>`;
+
             container.appendChild(toast);
             lucide.createIcons();
-            
             setTimeout(() => toast.remove(), 3000);
         }
 
-        // ============================================
-        // Loading State
-        // ============================================
+        // ============================================================
+        // Loading
+        // ============================================================
         function setLoading(loading) {
             state.isLoading = loading;
-            $('#loadingOverlay').classList.toggle('hidden', !loading);
+            $("#loadingOverlay").classList.toggle("hidden", !loading);
         }
 
-        // ============================================
+        // ============================================================
         // Navigation
-        // ============================================
-        function toggleMobileMenu() {
-            $('#mobileMenu').classList.toggle('hidden');
-        }
+        // ============================================================
+        function toggleMobileMenu() { $("#mobileMenu").classList.toggle("hidden"); }
+        function scrollToStudios() { $("#booking").scrollIntoView({ behavior: "smooth" }); }
 
-        function scrollToStudios() {
-            $('#booking').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // ============================================
+        // ============================================================
         // Auth Modal
-        // ============================================
-        function openAuthModal() {
-            $('#authModal').classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeAuthModal() {
-            $('#authModal').classList.add('hidden');
-            document.body.style.overflow = '';
-        }
+        // ============================================================
+        function openAuthModal() { $("#authModal").classList.remove("hidden"); document.body.style.overflow = "hidden"; }
+        function closeAuthModal() { $("#authModal").classList.add("hidden"); document.body.style.overflow = ""; }
 
         function switchAuthTab(tab) {
-            const isSignin = tab === 'signin';
-            
-            $('#signinTab').classList.toggle('bg-purple-600', isSignin);
-            $('#signinTab').classList.toggle('text-gray-400', !isSignin);
-            $('#registerTab').classList.toggle('bg-purple-600', !isSignin);
-            $('#registerTab').classList.toggle('text-gray-400', isSignin);
-            
-            $('#signinForm').classList.toggle('hidden', !isSignin);
-            $('#registerForm').classList.toggle('hidden', isSignin);
+            const isSignin = tab === "signin";
+
+            $("#signinTab").classList.toggle("bg-purple-600", isSignin);
+            $("#signinTab").classList.toggle("text-gray-400", !isSignin);
+            $("#registerTab").classList.toggle("bg-purple-600", !isSignin);
+            $("#registerTab").classList.toggle("text-gray-400", isSignin);
+
+            $("#signinForm").classList.toggle("hidden", !isSignin);
+            $("#registerForm").classList.toggle("hidden", isSignin);
         }
 
         async function signInWithGoogle() {
             try {
                 setLoading(true);
-                
-                // Sign in with Google OAuth
-                const { data, error } = await supabaseClient.auth.signInWithOAuth({
-                    provider: 'google',
-                    options: {
-                        redirectTo: window.location.origin,
-                        queryParams: {
-                            access_type: 'offline',
-                            prompt: 'consent'
-                        }
-                    }
+                const { error } = await supabaseClient.auth.signInWithOAuth({
+                    provider: "google",
+                    options: { redirectTo: window.location.origin, queryParams: { access_type: "offline", prompt: "consent" } },
                 });
-                
                 if (error) throw error;
-                
-                // OAuth will redirect, so this won't typically execute
-                showToast('Redirecting to Google...', 'info');
-                
+                showToast("Redirecting to Google...", "info");
             } catch (error) {
-                console.error('Google sign-in error:', error);
-                showToast('Failed to sign in with Google. Please try again.', 'error');
+                console.error("Google sign-in error:", error);
+                showToast("Failed to sign in with Google. Please try again.", "error");
                 setLoading(false);
             }
         }
 
-        // ============================================
+        // ============================================================
         // Confirm Modal
-        // ============================================
+        // ============================================================
         function openConfirmModal(title, message, onConfirm) {
-            $('#confirmTitle').textContent = title;
-            $('#confirmMessage').textContent = message;
-            $('#confirmBtn').onclick = () => {
-                closeConfirmModal();
-                onConfirm();
-            };
-            $('#confirmModal').classList.remove('hidden');
+            $("#confirmTitle").textContent = title;
+            $("#confirmMessage").textContent = message;
+            $("#confirmBtn").onclick = () => { closeConfirmModal(); onConfirm(); };
+            $("#confirmModal").classList.remove("hidden");
         }
+        function closeConfirmModal() { $("#confirmModal").classList.add("hidden"); }
 
-        function closeConfirmModal() {
-            $('#confirmModal').classList.add('hidden');
-        }
-
-        // ============================================
-        // Gallery
-        // ============================================
+        // ============================================================
+        // Gallery (FIXED PATHS)
+        // ============================================================
+        // Put your images here:
+        //   assets/gallery/01.jpg ... etc
+        // Or change these exact filenames to match yours.
         const GALLERY_IMAGES = [
-            '/mnt/user-data/uploads/IMG-20251124-WA0041.jpg',
-            '/mnt/user-data/uploads/IMG-20251124-WA0042.jpg',
-            '/mnt/user-data/uploads/IMG-20251124-WA0043.jpg',
-            '/mnt/user-data/uploads/IMG-20251124-WA0047.jpg',
-            '/mnt/user-data/uploads/WhatsApp_Image_2026-01-05_at_2_10_17_PM__1_.jpeg',
-            '/mnt/user-data/uploads/WhatsApp_Image_2026-01-05_at_2_10_17_PM.jpeg'
+            "assets/gallery/01.jpg",
+            "assets/gallery/02.jpg",
+            "assets/gallery/03.jpg",
+            "assets/gallery/04.jpg",
+            "assets/gallery/05.jpg",
+            "assets/gallery/06.jpg",
         ];
 
         function openGallery() {
-            const modal = document.createElement('div');
-            modal.id = 'galleryModal';
-            modal.className = 'fixed inset-0 z-50';
+            const modal = document.createElement("div");
+            modal.id = "galleryModal";
+            modal.className = "fixed inset-0 z-50";
             modal.innerHTML = `
                 <div class="modal-overlay absolute inset-0" onclick="closeGallery()"></div>
                 <div class="absolute inset-0 flex items-center justify-center p-4">
@@ -907,108 +745,102 @@
                         <button onclick="closeGallery()" class="absolute top-4 right-4 p-2 text-gray-400 hover:text-white transition-colors z-10">
                             <i data-lucide="x" class="w-6 h-6"></i>
                         </button>
-                        
+
                         <div class="text-center mb-8">
                             <h3 class="text-3xl font-bold mb-2">Studio <span class="gradient-text">Gallery</span></h3>
                             <p class="text-gray-400">Take a look at our professional studio spaces</p>
                         </div>
-                        
+
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             ${GALLERY_IMAGES.map((img, index) => `
                                 <div class="relative group cursor-pointer overflow-hidden rounded-2xl aspect-square" onclick="openImageLightbox(${index})">
-                                    <img src="${img}" alt="Studio ${index + 1}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                                    <img src="${img}" alt="Studio ${index + 1}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" onerror="handleImgError(this)">
                                     <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300 flex items-center justify-center">
                                         <i data-lucide="maximize-2" class="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"></i>
                                     </div>
                                 </div>
-                            `).join('')}
+                            `).join("")}
                         </div>
                     </div>
                 </div>
             `;
-            
+
             document.body.appendChild(modal);
-            document.body.style.overflow = 'hidden';
+            document.body.style.overflow = "hidden";
             lucide.createIcons();
         }
 
         function closeGallery() {
-            const modal = $('#galleryModal');
+            const modal = $("#galleryModal");
             if (modal) {
                 modal.remove();
-                document.body.style.overflow = '';
+                document.body.style.overflow = "";
             }
         }
 
         function openImageLightbox(index) {
-            const lightbox = document.createElement('div');
-            lightbox.id = 'imageLightbox';
-            lightbox.className = 'fixed inset-0 z-[60] bg-black bg-opacity-95';
+            const lightbox = document.createElement("div");
+            lightbox.id = "imageLightbox";
+            lightbox.className = "fixed inset-0 z-[60] bg-black bg-opacity-95";
             lightbox.innerHTML = `
                 <button onclick="closeLightbox()" class="absolute top-4 right-4 p-2 text-white hover:text-gray-300 transition-colors z-10">
                     <i data-lucide="x" class="w-8 h-8"></i>
                 </button>
-                
+
                 <button onclick="navigateLightbox(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 p-2 text-white hover:text-gray-300 transition-colors z-10">
                     <i data-lucide="chevron-left" class="w-8 h-8"></i>
                 </button>
-                
+
                 <button onclick="navigateLightbox(1)" class="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-white hover:text-gray-300 transition-colors z-10">
                     <i data-lucide="chevron-right" class="w-8 h-8"></i>
                 </button>
-                
+
                 <div class="flex items-center justify-center h-full p-8" onclick="closeLightbox()">
-                    <img id="lightboxImage" src="${GALLERY_IMAGES[index]}" alt="Studio Image" class="max-w-full max-h-full object-contain" onclick="event.stopPropagation()">
+                    <img id="lightboxImage" src="${GALLERY_IMAGES[index]}" alt="Studio Image" class="max-w-full max-h-full object-contain" onclick="event.stopPropagation()" onerror="handleImgError(this)">
                 </div>
-                
+
                 <div class="absolute bottom-4 left-1/2 -translate-x-1/2 text-white text-sm">
                     <span id="lightboxCounter">${index + 1} / ${GALLERY_IMAGES.length}</span>
                 </div>
             `;
-            
+
             document.body.appendChild(lightbox);
             window.currentLightboxIndex = index;
             lucide.createIcons();
-            
-            // Add keyboard navigation
-            document.addEventListener('keydown', handleLightboxKeyboard);
+
+            document.addEventListener("keydown", handleLightboxKeyboard);
         }
 
         function closeLightbox() {
-            const lightbox = $('#imageLightbox');
+            const lightbox = $("#imageLightbox");
             if (lightbox) {
                 lightbox.remove();
-                document.removeEventListener('keydown', handleLightboxKeyboard);
+                document.removeEventListener("keydown", handleLightboxKeyboard);
             }
         }
 
         function handleLightboxKeyboard(e) {
-            if (e.key === 'Escape') {
-                closeLightbox();
-            } else if (e.key === 'ArrowLeft') {
-                navigateLightbox(-1);
-            } else if (e.key === 'ArrowRight') {
-                navigateLightbox(1);
-            }
+            if (e.key === "Escape") closeLightbox();
+            else if (e.key === "ArrowLeft") navigateLightbox(-1);
+            else if (e.key === "ArrowRight") navigateLightbox(1);
         }
 
         function navigateLightbox(direction) {
             window.currentLightboxIndex = (window.currentLightboxIndex + direction + GALLERY_IMAGES.length) % GALLERY_IMAGES.length;
-            $('#lightboxImage').src = GALLERY_IMAGES[window.currentLightboxIndex];
-            $('#lightboxCounter').textContent = `${window.currentLightboxIndex + 1} / ${GALLERY_IMAGES.length}`;
+            $("#lightboxImage").src = GALLERY_IMAGES[window.currentLightboxIndex];
+            $("#lightboxCounter").textContent = `${window.currentLightboxIndex + 1} / ${GALLERY_IMAGES.length}`;
         }
 
-        // ============================================
+        // ============================================================
         // Studios
-        // ============================================
+        // ============================================================
         function renderStudios() {
-            const grid = $('#studiosGrid');
-            
+            const grid = $("#studiosGrid");
             grid.innerHTML = CONFIG.STUDIOS.map((studio, index) => `
-                <div class="studio-card card p-6 ${studio.available ? 'cursor-pointer' : 'disabled'} animate-fadeIn opacity-0 relative" 
-                     ${studio.available ? `onclick="selectStudio('${studio.id}')"` : ''}
-                     style="animation-delay: ${index * 0.1}s; animation-fill-mode: forwards">
-                    ${!studio.available ? '<span class="coming-soon-badge">Coming Soon</span>' : ''}
+                <div class="studio-card card p-6 ${studio.available ? "cursor-pointer" : "disabled"} animate-fadeIn opacity-0 relative"
+                    ${studio.available ? `onclick="selectStudio('${studio.id}')"` : ""}
+                    style="animation-delay: ${index * 0.1}s; animation-fill-mode: forwards">
+                    ${!studio.available ? '<span class="coming-soon-badge">Coming Soon</span>' : ""}
                     <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-${studio.color}-500/20 to-${studio.color}-500/5 flex items-center justify-center mb-4">
                         <i data-lucide="${studio.icon}" class="w-7 h-7 text-${studio.color}-400"></i>
                     </div>
@@ -1023,313 +855,246 @@
                         `}
                     </div>
                 </div>
-            `).join('');
-            
+            `).join("");
             lucide.createIcons();
         }
 
         function selectStudio(studioId) {
-            const studio = CONFIG.STUDIOS.find(s => s.id === studioId);
-            if (!studio.available) {
-                showToast('This studio is not available yet', 'warning');
-                return;
-            }
-            
+            const studio = CONFIG.STUDIOS.find((s) => s.id === studioId);
+            if (!studio.available) { showToast("This studio is not available yet", "warning"); return; }
             state.selectedStudio = studio;
-            $('#studioSelect').value = studioId;
+            $("#studioSelect").value = studioId;
             updatePricing();
             scrollToStudios();
         }
 
-        // ============================================
+        // ============================================================
         // Booking Form
-        // ============================================
+        // ============================================================
         function initBookingForm() {
-            // Set minimum date to today
-            const today = new Date().toISOString().split('T')[0];
-            $('#dateSelect').min = today;
-            $('#dateSelect').value = today;
-            
-            // Generate time slots
-            const timeSelect = $('#timeSelect');
+            const today = new Date().toISOString().split("T")[0];
+            $("#dateSelect").min = today;
+            $("#dateSelect").value = today;
+
+            const timeSelect = $("#timeSelect");
             for (let hour = 0; hour < 24; hour++) {
-                const time24 = `${hour.toString().padStart(2, '0')}:00`;
+                const time24 = `${hour.toString().padStart(2, "0")}:00`;
                 const time12 = formatTime(time24);
                 timeSelect.innerHTML += `<option value="${time24}">${time12}</option>`;
             }
-            
-            // Set default to 9 AM
-            timeSelect.value = '09:00';
-            
-            // Add event listeners
-            $('#studioSelect').addEventListener('change', updatePricing);
-            $('#durationSelect').addEventListener('change', updatePricing);
-            
+            timeSelect.value = "09:00";
+
+            $("#studioSelect").addEventListener("change", updatePricing);
+            $("#durationSelect").addEventListener("change", updatePricing);
+
             updatePricing();
         }
 
         function updatePricing() {
-            const studioId = $('#studioSelect').value;
-            const duration = parseInt($('#durationSelect').value);
-            const studio = CONFIG.STUDIOS.find(s => s.id === studioId);
-            
+            const studioId = $("#studioSelect").value;
+            const duration = parseInt($("#durationSelect").value, 10);
+            const studio = CONFIG.STUDIOS.find((s) => s.id === studioId);
+
             if (!studio || !studio.available) {
-                $('#subtotal').textContent = 'N/A';
-                $('#serviceFee').textContent = 'N/A';
-                $('#total').textContent = 'N/A';
+                $("#subtotal").textContent = "N/A";
+                $("#serviceFee").textContent = "N/A";
+                $("#total").textContent = "N/A";
                 return;
             }
-            
+
             const subtotal = studio.price * duration;
             const serviceFee = subtotal * (CONFIG.SERVICE_FEE_PERCENT / 100);
             const total = subtotal + serviceFee;
-            
-            $('#subtotal').textContent = formatCurrency(subtotal);
-            $('#serviceFee').textContent = formatCurrency(serviceFee);
-            $('#total').textContent = formatCurrency(total);
+
+            $("#subtotal").textContent = formatCurrency(subtotal);
+            $("#serviceFee").textContent = formatCurrency(serviceFee);
+            $("#total").textContent = formatCurrency(total);
         }
 
-        // ============================================
-        // Form Submissions
-        // ============================================
+        // ============================================================
+        // Form Submissions (unchanged from your version)
+        // ============================================================
         function initForms() {
-            $('#bookingForm').addEventListener('submit', handleBookingSubmit);
-            $('#signinForm').addEventListener('submit', handleSigninSubmit);
-            $('#registerForm').addEventListener('submit', handleRegisterSubmit);
+            $("#bookingForm").addEventListener("submit", handleBookingSubmit);
+            $("#signinForm").addEventListener("submit", handleSigninSubmit);
+            $("#registerForm").addEventListener("submit", handleRegisterSubmit);
         }
 
         async function handleBookingSubmit(e) {
             e.preventDefault();
-            
-            const studioId = $('#studioSelect').value;
-            const studio = CONFIG.STUDIOS.find(s => s.id === studioId);
-            
-            if (!studio.available) {
-                showToast('This studio is not available for booking yet', 'warning');
-                return;
-            }
-            
-            if (!state.user) {
-                openAuthModal();
-                showToast('Please sign in to make a booking', 'warning');
-                return;
-            }
-            
-            const date = $('#dateSelect').value;
-            const time = $('#timeSelect').value;
-            const duration = parseInt($('#durationSelect').value);
-            
+
+            const studioId = $("#studioSelect").value;
+            const studio = CONFIG.STUDIOS.find((s) => s.id === studioId);
+
+            if (!studio.available) { showToast("This studio is not available for booking yet", "warning"); return; }
+            if (!state.user) { openAuthModal(); showToast("Please sign in to make a booking", "warning"); return; }
+
+            const date = $("#dateSelect").value;
+            const time = $("#timeSelect").value;
+            const duration = parseInt($("#durationSelect").value, 10);
+
             const subtotal = studio.price * duration;
             const serviceFee = subtotal * (CONFIG.SERVICE_FEE_PERCENT / 100);
             const total = subtotal + serviceFee;
-            
+
             openConfirmModal(
-                'Confirm Booking',
+                "Confirm Booking",
                 `Book ${studio.name} on ${formatDate(date)} at ${formatTime(time)} for ${duration} hour(s)? Total: ${formatCurrency(total)}`,
                 async () => {
-                    await processPayment({
-                        studioId,
-                        studioName: studio.name,
-                        date,
-                        time,
-                        duration,
-                        subtotal,
-                        serviceFee,
-                        total
-                    });
+                    await processPayment({ studioId, studioName: studio.name, date, time, duration, subtotal, serviceFee, total });
                 }
             );
         }
 
         async function processPayment(bookingData) {
             setLoading(true);
-            
+
             try {
-                // Create payment request with HitPay
                 const paymentPayload = {
                     amount: bookingData.total.toFixed(2),
-                    currency: 'MYR',
+                    currency: "MYR",
                     name: `${bookingData.studioName} Booking`,
                     purpose: `Studio booking for ${bookingData.date} at ${bookingData.time}`,
                     reference_number: `LEISH-${Date.now()}`,
                     redirect_url: `${window.location.origin}?payment=success`,
                     webhook: `${window.location.origin}/api/webhook/hitpay`,
                     email: state.user.email,
-                    buyer_name: state.user.name
+                    buyer_name: state.user.name,
                 };
 
-                // In a real implementation, this would be a server-side API call
-                // For now, we'll simulate the HitPay payment flow
-                const response = await fetch('https://api.hit-pay.com/v1/payment-requests', {
-                    method: 'POST',
+                const response = await fetch("https://api.hit-pay.com/v1/payment-requests", {
+                    method: "POST",
                     headers: {
-                        'Content-Type': 'application/json',
-                        'X-BUSINESS-API-KEY': CONFIG.HITPAY_API_KEY
+                        "Content-Type": "application/json",
+                        "X-BUSINESS-API-KEY": CONFIG.HITPAY_API_KEY,
                     },
-                    body: JSON.stringify(paymentPayload)
+                    body: JSON.stringify(paymentPayload),
                 });
 
-                if (!response.ok) {
-                    throw new Error('Payment request failed');
-                }
-
+                if (!response.ok) throw new Error("Payment request failed");
                 const paymentData = await response.json();
-                
-                // Store booking data temporarily (in a real app, this would be in a database)
-                sessionStorage.setItem('pendingBooking', JSON.stringify(bookingData));
-                
-                // Redirect to HitPay payment page
+
+                sessionStorage.setItem("pendingBooking", JSON.stringify(bookingData));
                 window.location.href = paymentData.url;
-                
             } catch (error) {
-                console.error('Payment error:', error);
+                console.error("Payment error:", error);
                 setLoading(false);
-                
-                // For demo purposes, show an alternative flow
-                showToast('Payment gateway integration in progress. Creating demo booking...', 'info');
-                
-                // Simulate successful payment for demo
+
+                showToast("Payment gateway integration in progress. Creating demo booking...", "info");
+
                 setTimeout(() => {
                     const booking = {
                         id: Date.now(),
                         ...bookingData,
-                        status: 'confirmed',
-                        paymentMethod: 'HitPay (Demo)',
-                        createdAt: new Date().toISOString()
+                        status: "confirmed",
+                        paymentMethod: "HitPay (Demo)",
+                        createdAt: new Date().toISOString(),
                     };
-                    
+
                     state.bookings.unshift(booking);
                     renderBookings();
-                    
+
                     setLoading(false);
-                    showToast('Booking confirmed! Check your email for details.', 'success');
-                    
-                    // Show dashboard
-                    $('#dashboard').classList.remove('hidden');
-                    $('#dashboard').scrollIntoView({ behavior: 'smooth' });
+                    showToast("Booking confirmed! Check your email for details.", "success");
+
+                    $("#dashboard").classList.remove("hidden");
+                    $("#dashboard").scrollIntoView({ behavior: "smooth" });
                 }, 1500);
             }
         }
 
-        // Handle payment callback when user returns from HitPay
         function handlePaymentCallback() {
             const urlParams = new URLSearchParams(window.location.search);
-            const paymentStatus = urlParams.get('payment');
-            
-            if (paymentStatus === 'success') {
-                const pendingBooking = sessionStorage.getItem('pendingBooking');
-                
+            const paymentStatus = urlParams.get("payment");
+
+            if (paymentStatus === "success") {
+                const pendingBooking = sessionStorage.getItem("pendingBooking");
+
                 if (pendingBooking) {
                     const bookingData = JSON.parse(pendingBooking);
-                    
                     const booking = {
                         id: Date.now(),
                         ...bookingData,
-                        status: 'confirmed',
-                        paymentMethod: 'HitPay',
-                        createdAt: new Date().toISOString()
+                        status: "confirmed",
+                        paymentMethod: "HitPay",
+                        createdAt: new Date().toISOString(),
                     };
-                    
+
                     state.bookings.unshift(booking);
                     renderBookings();
-                    
-                    sessionStorage.removeItem('pendingBooking');
-                    
-                    showToast('Payment successful! Booking confirmed.', 'success');
-                    
-                    // Show dashboard
-                    $('#dashboard').classList.remove('hidden');
-                    
-                    // Clear URL parameters
+                    sessionStorage.removeItem("pendingBooking");
+                    showToast("Payment successful! Booking confirmed.", "success");
+
+                    $("#dashboard").classList.remove("hidden");
                     window.history.replaceState({}, document.title, window.location.pathname);
                 }
-            } else if (paymentStatus === 'failed' || paymentStatus === 'cancelled') {
-                showToast('Payment was cancelled or failed. Please try again.', 'error');
-                sessionStorage.removeItem('pendingBooking');
-                
-                // Clear URL parameters
+            } else if (paymentStatus === "failed" || paymentStatus === "cancelled") {
+                showToast("Payment was cancelled or failed. Please try again.", "error");
+                sessionStorage.removeItem("pendingBooking");
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
         }
 
         async function handleSigninSubmit(e) {
             e.preventDefault();
-            
             const email = e.target.querySelector('input[type="email"]').value;
             const password = e.target.querySelector('input[type="password"]').value;
-            
+
             setLoading(true);
-            
             try {
-                const { data, error } = await supabaseClient.auth.signInWithPassword({
-                    email,
-                    password
-                });
-                
+                const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
                 if (error) throw error;
-                
-                // Auth state change will handle the rest
                 setLoading(false);
-                
             } catch (error) {
-                console.error('Sign in error:', error);
+                console.error("Sign in error:", error);
                 setLoading(false);
-                showToast(error.message || 'Failed to sign in. Please check your credentials.', 'error');
+                showToast(error.message || "Failed to sign in. Please check your credentials.", "error");
             }
         }
 
         async function handleRegisterSubmit(e) {
             e.preventDefault();
-            
+
             const name = e.target.querySelector('input[type="text"]').value;
             const email = e.target.querySelector('input[type="email"]').value;
             const password = e.target.querySelectorAll('input[type="password"]');
-            
+
             if (password[0].value !== password[1].value) {
-                showToast('Passwords do not match', 'error');
+                showToast("Passwords do not match", "error");
                 return;
             }
-            
+
             setLoading(true);
-            
             try {
                 const { data, error } = await supabaseClient.auth.signUp({
-                    email: email,
+                    email,
                     password: password[0].value,
-                    options: {
-                        data: {
-                            full_name: name
-                        }
-                    }
+                    options: { data: { full_name: name } },
                 });
-                
                 if (error) throw error;
-                
+
                 setLoading(false);
-                
+
                 if (data?.user?.identities?.length === 0) {
-                    // User already exists
-                    showToast('An account with this email already exists. Please sign in.', 'warning');
-                    switchAuthTab('signin');
+                    showToast("An account with this email already exists. Please sign in.", "warning");
+                    switchAuthTab("signin");
                 } else {
-                    // Check if email confirmation is required
-                    showToast('Account created! Please check your email to verify your account.', 'success');
+                    showToast("Account created! Please check your email to verify your account.", "success");
                     closeAuthModal();
                 }
-                
             } catch (error) {
-                console.error('Registration error:', error);
+                console.error("Registration error:", error);
                 setLoading(false);
-                showToast(error.message || 'Failed to create account. Please try again.', 'error');
+                showToast(error.message || "Failed to create account. Please try again.", "error");
             }
         }
 
-        // ============================================
+        // ============================================================
         // Dashboard
-        // ============================================
+        // ============================================================
         function renderBookings() {
-            const list = $('#bookingsList');
-            
+            const list = $("#bookingsList");
+
             if (state.bookings.length === 0) {
                 list.innerHTML = `
                     <div class="glass rounded-2xl p-12 text-center">
@@ -1338,20 +1103,18 @@
                         </div>
                         <h3 class="text-xl font-semibold mb-2">No bookings yet</h3>
                         <p class="text-gray-400 mb-6">Start by booking your first studio session</p>
-                        <button onclick="scrollToStudios()" class="btn-primary px-6 py-3 rounded-xl font-medium">
-                            Book Now
-                        </button>
+                        <button onclick="scrollToStudios()" class="btn-primary px-6 py-3 rounded-xl font-medium">Book Now</button>
                     </div>
                 `;
             } else {
-                list.innerHTML = state.bookings.map(booking => {
-                    const studio = CONFIG.STUDIOS.find(s => s.id === booking.studioId);
+                list.innerHTML = state.bookings.map((booking) => {
+                    const studio = CONFIG.STUDIOS.find((s) => s.id === booking.studioId);
                     return `
                         <div class="card p-6 animate-fadeIn">
                             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                                 <div class="flex items-center gap-4">
-                                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-${studio?.color || 'purple'}-500/20 to-${studio?.color || 'purple'}-500/5 flex items-center justify-center">
-                                        <i data-lucide="${studio?.icon || 'calendar'}" class="w-7 h-7 text-${studio?.color || 'purple'}-400"></i>
+                                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-${studio?.color || "purple"}-500/20 to-${studio?.color || "purple"}-500/5 flex items-center justify-center">
+                                        <i data-lucide="${studio?.icon || "calendar"}" class="w-7 h-7 text-${studio?.color || "purple"}-400"></i>
                                     </div>
                                     <div>
                                         <h4 class="font-semibold">${booking.studioName}</h4>
@@ -1363,9 +1126,9 @@
                                     <div class="text-right">
                                         <div class="font-bold gradient-text">${formatCurrency(booking.total)}</div>
                                         <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                                            booking.status === 'confirmed' ? 'bg-green-500/20 text-green-400' :
-                                            booking.status === 'pending' ? 'bg-yellow-500/20 text-yellow-400' :
-                                            'bg-red-500/20 text-red-400'
+                                            booking.status === "confirmed" ? "bg-green-500/20 text-green-400" :
+                                            booking.status === "pending" ? "bg-yellow-500/20 text-yellow-400" :
+                                            "bg-red-500/20 text-red-400"
                                         }">
                                             ${booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
                                         </span>
@@ -1377,115 +1140,82 @@
                             </div>
                         </div>
                     `;
-                }).join('');
+                }).join("");
             }
-            
             lucide.createIcons();
         }
 
         function cancelBooking(bookingId) {
             openConfirmModal(
-                'Cancel Booking',
-                'Are you sure you want to cancel this booking? This action cannot be undone.',
+                "Cancel Booking",
+                "Are you sure you want to cancel this booking? This action cannot be undone.",
                 () => {
-                    state.bookings = state.bookings.filter(b => b.id !== bookingId);
+                    state.bookings = state.bookings.filter((b) => b.id !== bookingId);
                     renderBookings();
-                    showToast('Booking cancelled', 'success');
+                    showToast("Booking cancelled", "success");
                 }
             );
         }
 
-        // ============================================
+        // ============================================================
         // Auth UI
-        // ============================================
+        // ============================================================
         function updateAuthUI() {
-            const authBtn = $('#authBtn');
-            
+            const authBtn = $("#authBtn");
             if (state.user) {
-                authBtn.innerHTML = `
-                    <i data-lucide="user" class="w-4 h-4"></i>
-                    <span>${state.user.name.split(' ')[0]}</span>
-                `;
+                authBtn.innerHTML = `<i data-lucide="user" class="w-4 h-4"></i><span>${state.user.name.split(" ")[0]}</span>`;
                 authBtn.onclick = () => signOut();
             } else {
-                authBtn.innerHTML = `
-                    <i data-lucide="log-in" class="w-4 h-4"></i>
-                    <span>Sign In</span>
-                `;
+                authBtn.innerHTML = `<i data-lucide="log-in" class="w-4 h-4"></i><span>Sign In</span>`;
                 authBtn.onclick = openAuthModal;
             }
-            
             lucide.createIcons();
         }
 
         function signOut() {
-            openConfirmModal(
-                'Sign Out',
-                'Are you sure you want to sign out?',
-                async () => {
-                    setLoading(true);
-                    
-                    try {
-                        const { error } = await supabaseClient.auth.signOut();
-                        if (error) throw error;
-                        
-                        showToast('Signed out successfully', 'success');
-                    } catch (error) {
-                        console.error('Sign out error:', error);
-                        showToast('Failed to sign out', 'error');
-                    } finally {
-                        setLoading(false);
-                    }
-                }
-            );
-        }
-
-        // ============================================
-        // Scroll Effects
-        // ============================================
-        function initScrollEffects() {
-            window.addEventListener('scroll', () => {
-                const navbar = $('#navbar');
-                if (window.scrollY > 50) {
-                    navbar.classList.add('shadow-lg');
-                } else {
-                    navbar.classList.remove('shadow-lg');
+            openConfirmModal("Sign Out", "Are you sure you want to sign out?", async () => {
+                setLoading(true);
+                try {
+                    const { error } = await supabaseClient.auth.signOut();
+                    if (error) throw error;
+                    showToast("Signed out successfully", "success");
+                } catch (error) {
+                    console.error("Sign out error:", error);
+                    showToast("Failed to sign out", "error");
+                } finally {
+                    setLoading(false);
                 }
             });
         }
 
-        // ============================================
-        // Initialize App
-        // ============================================
-        function init() {
-            // Initialize Supabase
-            initSupabase();
-            
-            // Initialize Lucide icons
-            lucide.createIcons();
-            
-            // Render components
-            renderStudios();
-            renderBookings();
-            
-            // Initialize forms
-            initBookingForm();
-            initForms();
-            
-            // Initialize effects
-            initScrollEffects();
-            
-            // Update auth UI
-            updateAuthUI();
-            
-            // Handle payment callback if present
-            handlePaymentCallback();
-            
-            console.log('🎬 Leish Studio initialized successfully!');
+        // ============================================================
+        // Scroll Effects
+        // ============================================================
+        function initScrollEffects() {
+            window.addEventListener("scroll", () => {
+                const navbar = $("#navbar");
+                navbar.classList.toggle("shadow-lg", window.scrollY > 50);
+            });
         }
 
-        // Run on DOM ready
-        document.addEventListener('DOMContentLoaded', init);
+        // ============================================================
+        // Init
+        // ============================================================
+        function init() {
+            initSupabase();
+            lucide.createIcons();
+            renderStudios();
+            renderBookings();
+            initBookingForm();
+            initForms();
+            initScrollEffects();
+            updateAuthUI();
+            handlePaymentCallback();
+
+            console.log("🎬 Leish Studio initialized successfully!");
+        }
+
+        document.addEventListener("DOMContentLoaded", init);
     </script>
 </body>
 </html>
