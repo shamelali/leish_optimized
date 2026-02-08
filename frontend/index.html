@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>Leish Studio | Book Your Creative Space</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -1378,14 +1379,18 @@
 
                 <div class="hero-images">
                     <div class="hero-image-card">
-                        <img src="/mnt/user-data/uploads/IMG-20251124-WA0051.jpg" alt="Station A">
+                        <div class="space-icon float-1" style="width: 100%; height: 200px; font-size: 64px; margin: 0; border-radius: 0;">
+                            <i class="fas fa-desktop"></i>
+                        </div>
                         <div class="hero-image-label">
                             <h3>Station A</h3>
                             <p>Professional setup with natural lighting</p>
                         </div>
                     </div>
                     <div class="hero-image-card">
-                        <img src="/mnt/user-data/uploads/IMG-20251124-WA0051.jpg" alt="Station B">
+                        <div class="space-icon float-2" style="width: 100%; height: 200px; font-size: 64px; margin: 0; border-radius: 0;">
+                            <i class="fas fa-laptop"></i>
+                        </div>
                         <div class="hero-image-label">
                             <h3>Station B</h3>
                             <p>Ergonomic design for extended sessions</p>
@@ -1714,7 +1719,6 @@
                 description: 'Perfect for solo work with natural lighting and privacy',
                 price: 50,
                 icon: 'fas fa-desktop',
-                image: '/mnt/user-data/uploads/IMG-20251124-WA0051.jpg',
                 status: 'available'
             },
             {
@@ -1724,7 +1728,6 @@
                 description: 'Equipped with dual monitors and ergonomic setup',
                 price: 50,
                 icon: 'fas fa-laptop',
-                image: '/mnt/user-data/uploads/IMG-20251124-WA0051.jpg',
                 status: 'available'
             },
             {
@@ -1732,9 +1735,8 @@
                 name: 'Full Studio',
                 type: 'studio',
                 description: 'Complete creative space with professional equipment - Coming Soon',
-                price: 100,
+                price: 120,
                 icon: 'fas fa-video',
-                image: null,
                 status: 'unavailable'
             }
         ];
@@ -1793,11 +1795,6 @@
                 <div class="space-icon float-1"><i class="${space.icon}"></i></div>
                 <h3>${space.name}</h3>
                 <p>${space.description}</p>
-                ${space.image ? `
-                    <div class="space-image">
-                        <img src="${space.image}" alt="${space.name}">
-                    </div>
-                ` : ''}
                 <div class="space-meta">
                     <span class="space-price">RM ${space.price}/hr</span>
                     <span class="space-status ${space.status}">${space.status === 'available' ? 'Available' : 'Coming Soon'}</span>
@@ -2232,19 +2229,30 @@
 
         // ===== Auth Functions =====
         function socialLogin(provider) {
-            // Simulate social login
-            const user = {
-                id: 'user_' + Date.now(),
-                name: provider === 'google' ? 'Google User' : 'Apple User',
-                email: `user@${provider}.com`,
-                role: 'user'
-            };
+            try {
+                console.log('Social login initiated:', provider);
+                alert('Social login button clicked: ' + provider); // Debug alert
+                
+                // Simulate social login
+                const user = {
+                    id: 'user_' + Date.now(),
+                    name: provider === 'google' ? 'Google User' : 'Apple User',
+                    email: `user@${provider}.com`,
+                    role: 'user'
+                };
 
-            state.currentUser = user;
-            updateAuthUI();
-            closeAuthModal();
-            switchTab('book');
-            showToast(`Signed in with ${provider.charAt(0).toUpperCase() + provider.slice(1)}`, 'success');
+                state.currentUser = user;
+                console.log('User set:', state.currentUser);
+                
+                updateAuthUI();
+                closeAuthModal();
+                switchTab('book');
+                showToast(`Signed in with ${provider.charAt(0).toUpperCase() + provider.slice(1)}`, 'success');
+            } catch (error) {
+                console.error('Social login error:', error);
+                alert('Error: ' + error.message); // Debug alert
+                showToast('Login failed. Please try again.', 'error');
+            }
         }
 
         function openAuthModal() {
@@ -2275,63 +2283,94 @@
         }
 
         function submitAuth() {
-            const email = document.getElementById('authEmail').value;
-            const password = document.getElementById('authPassword').value;
+            try {
+                console.log('Submit auth called, mode:', state.authMode);
+                
+                const email = document.getElementById('authEmail').value;
+                const password = document.getElementById('authPassword').value;
 
-            if (!email || !password) {
-                showToast('Please fill in all fields', 'error');
-                return;
-            }
+                console.log('Email:', email, 'Password length:', password.length);
 
-            if (state.authMode === 'register') {
-                const name = document.getElementById('authName').value;
-
-                if (!name) {
-                    showToast('Please enter your name', 'error');
+                if (!email || !password) {
+                    showToast('Please fill in all fields', 'error');
                     return;
                 }
 
-                state.currentUser = {
-                    id: 'user_' + Date.now(),
-                    name,
-                    email,
-                    role: email.includes('admin') ? 'admin' : 'user'
-                };
+                if (state.authMode === 'register') {
+                    const name = document.getElementById('authName').value;
 
-                showToast('Account created successfully!', 'success');
-            } else {
-                state.currentUser = {
-                    id: 'user_' + Date.now(),
-                    name: email.split('@')[0],
-                    email,
-                    role: email.includes('admin') ? 'admin' : 'user'
-                };
+                    if (!name) {
+                        showToast('Please enter your name', 'error');
+                        return;
+                    }
 
-                showToast('Welcome back!', 'success');
+                    state.currentUser = {
+                        id: 'user_' + Date.now(),
+                        name,
+                        email,
+                        role: email.includes('admin') ? 'admin' : 'user'
+                    };
+
+                    console.log('User registered:', state.currentUser);
+                    showToast('Account created successfully!', 'success');
+                } else {
+                    state.currentUser = {
+                        id: 'user_' + Date.now(),
+                        name: email.split('@')[0],
+                        email,
+                        role: email.includes('admin') ? 'admin' : 'user'
+                    };
+
+                    console.log('User logged in:', state.currentUser);
+                    showToast('Welcome back!', 'success');
+                }
+
+                updateAuthUI();
+                closeAuthModal();
+                switchTab('book');
+            } catch (error) {
+                console.error('Submit auth error:', error);
+                showToast('Authentication failed. Please try again.', 'error');
             }
-
-            updateAuthUI();
-            closeAuthModal();
-            switchTab('book');
         }
 
         function updateAuthUI() {
-            const authBtn = document.getElementById('authBtn');
-            const authBtnText = document.getElementById('authBtnText');
-            const adminTab = document.getElementById('adminTab');
-            const navTabs = document.getElementById('navTabs');
-
-            if (state.currentUser) {
-                authBtnText.textContent = state.currentUser.name;
-                navTabs.classList.remove('hidden');
+            try {
+                console.log('Updating auth UI, current user:', state.currentUser);
                 
-                if (state.currentUser.role === 'admin') {
-                    adminTab.classList.remove('hidden');
+                const authBtn = document.getElementById('authBtn');
+                const authBtnText = document.getElementById('authBtnText');
+                const adminTab = document.getElementById('adminTab');
+                const navTabs = document.getElementById('navTabs');
+
+                if (!authBtn || !authBtnText || !adminTab || !navTabs) {
+                    console.error('Missing UI elements:', {
+                        authBtn: !!authBtn,
+                        authBtnText: !!authBtnText,
+                        adminTab: !!adminTab,
+                        navTabs: !!navTabs
+                    });
+                    return;
                 }
-            } else {
-                authBtnText.textContent = 'Sign In';
-                navTabs.classList.add('hidden');
-                adminTab.classList.add('hidden');
+
+                if (state.currentUser) {
+                    authBtnText.textContent = state.currentUser.name;
+                    navTabs.classList.remove('hidden');
+                    
+                    if (state.currentUser.role === 'admin') {
+                        adminTab.classList.remove('hidden');
+                    }
+                    
+                    console.log('Auth UI updated - user logged in');
+                } else {
+                    authBtnText.textContent = 'Sign In';
+                    navTabs.classList.add('hidden');
+                    adminTab.classList.add('hidden');
+                    
+                    console.log('Auth UI updated - user logged out');
+                }
+            } catch (error) {
+                console.error('Update auth UI error:', error);
             }
         }
 
