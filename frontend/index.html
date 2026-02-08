@@ -1584,43 +1584,72 @@
     <div class="modal-overlay" id="authModal">
         <div class="modal">
             <div class="modal-header">
-                <h2 id="authModalTitle">Sign In</h2>
+                <h2 id="authModalTitle">Create Account</h2>
                 <button class="modal-close" onclick="closeAuthModal()">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             <div class="modal-body">
-                <div class="social-login">
-                    <button class="social-btn" onclick="socialLogin('google')">
-                        <i class="fab fa-google"></i>
-                        Google
+                <!-- Registration/Login Selection Page -->
+                <div id="authSelectionPage">
+                    <p style="text-align: center; color: var(--text-muted); margin-bottom: 24px;">
+                        Choose how you'd like to sign up
+                    </p>
+                    
+                    <div class="social-login" style="grid-template-columns: 1fr; gap: 12px;">
+                        <button class="social-btn" onclick="initiateFacebookAuth()">
+                            <i class="fab fa-facebook"></i>
+                            Continue with Facebook
+                        </button>
+                        <button class="social-btn" onclick="initiateInstagramAuth()">
+                            <i class="fab fa-instagram"></i>
+                            Continue with Instagram
+                        </button>
+                        <button class="social-btn" onclick="initiateAppleAuth()">
+                            <i class="fab fa-apple"></i>
+                            Continue with Apple ID
+                        </button>
+                    </div>
+                    
+                    <div class="divider">or</div>
+                    
+                    <button class="social-btn" onclick="showEmailAuthPage()" style="width: 100%; background: var(--accent); color: white; border-color: var(--accent);">
+                        <i class="fas fa-envelope"></i>
+                        Continue with Email
                     </button>
-                    <button class="social-btn" onclick="socialLogin('apple')">
-                        <i class="fab fa-apple"></i>
-                        Apple
+
+                    <p style="text-align: center; color: var(--text-muted); margin-top: 24px; font-size: 0.9rem;">
+                        Already have an account? <a href="#" onclick="event.preventDefault(); showEmailAuthPage('login')" style="color: var(--accent); text-decoration: none;">Sign in</a>
+                    </p>
+                </div>
+
+                <!-- Email Auth Page (Hidden by default) -->
+                <div id="emailAuthPage" class="hidden">
+                    <button onclick="showAuthSelection()" style="background: transparent; border: none; color: var(--text-muted); cursor: pointer; margin-bottom: 20px; padding: 0;">
+                        <i class="fas fa-arrow-left"></i> Back
                     </button>
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="authEmail" placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="authPassword" placeholder="••••••••">
+                    </div>
+                    <div class="form-group" id="nameField" class="hidden">
+                        <label>Full Name</label>
+                        <input type="text" id="authName" placeholder="John Doe">
+                    </div>
+
+                    <button class="btn-primary" onclick="submitEmailAuth()" id="emailAuthSubmitBtn" style="width: 100%; margin-top: 16px;">
+                        Sign Up
+                    </button>
+
+                    <p id="authSwitchText" style="text-align: center; color: var(--text-muted); margin-top: 16px; font-size: 0.9rem;">
+                        Already have an account? <a href="#" onclick="event.preventDefault(); toggleEmailAuthMode()" style="color: var(--accent); text-decoration: none;" id="authSwitchLink">Sign in</a>
+                    </p>
                 </div>
-                <div class="divider">or continue with email</div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="authEmail" placeholder="your@email.com">
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="authPassword" placeholder="••••••••">
-                </div>
-                <div class="form-group hidden" id="nameField">
-                    <label>Full Name</label>
-                    <input type="text" id="authName" placeholder="John Doe">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-secondary" onclick="toggleAuthMode()" id="authToggleBtn">
-                    Create Account
-                </button>
-                <button class="btn-primary" onclick="submitAuth()" id="authSubmitBtn">
-                    Sign In
-                </button>
             </div>
         </div>
     </div>
@@ -2228,68 +2257,195 @@
         }
 
         // ===== Auth Functions =====
-        function socialLogin(provider) {
-            try {
-                console.log('Social login initiated:', provider);
-                alert('Social login button clicked: ' + provider); // Debug alert
-                
-                // Simulate social login
-                const user = {
-                    id: 'user_' + Date.now(),
-                    name: provider === 'google' ? 'Google User' : 'Apple User',
-                    email: `user@${provider}.com`,
-                    role: 'user'
-                };
-
-                state.currentUser = user;
-                console.log('User set:', state.currentUser);
-                
-                updateAuthUI();
-                closeAuthModal();
-                switchTab('book');
-                showToast(`Signed in with ${provider.charAt(0).toUpperCase() + provider.slice(1)}`, 'success');
-            } catch (error) {
-                console.error('Social login error:', error);
-                alert('Error: ' + error.message); // Debug alert
-                showToast('Login failed. Please try again.', 'error');
-            }
+        
+        // Show/hide auth pages
+        function showAuthSelection() {
+            document.getElementById('authSelectionPage').classList.remove('hidden');
+            document.getElementById('emailAuthPage').classList.add('hidden');
+            document.getElementById('authModalTitle').textContent = 'Create Account';
         }
 
-        function openAuthModal() {
-            if (state.currentUser) {
-                logout();
-            } else {
-                document.getElementById('authModal').classList.add('active');
-            }
-        }
-
-        function closeAuthModal() {
-            document.getElementById('authModal').classList.remove('active');
-        }
-
-        function toggleAuthMode() {
-            state.authMode = state.authMode === 'login' ? 'register' : 'login';
-
-            document.getElementById('authModalTitle').textContent = state.authMode === 'login' ? 'Sign In' : 'Create Account';
-            document.getElementById('authToggleBtn').textContent = state.authMode === 'login' ? 'Create Account' : 'Sign In Instead';
-            document.getElementById('authSubmitBtn').textContent = state.authMode === 'login' ? 'Sign In' : 'Create Account';
+        function showEmailAuthPage(mode = 'register') {
+            document.getElementById('authSelectionPage').classList.add('hidden');
+            document.getElementById('emailAuthPage').classList.remove('hidden');
             
+            state.authMode = mode;
+            updateEmailAuthUI();
+        }
+
+        function updateEmailAuthUI() {
             const nameField = document.getElementById('nameField');
+            const submitBtn = document.getElementById('emailAuthSubmitBtn');
+            const switchText = document.getElementById('authSwitchText');
+            const switchLink = document.getElementById('authSwitchLink');
+            const modalTitle = document.getElementById('authModalTitle');
+
             if (state.authMode === 'register') {
                 nameField.classList.remove('hidden');
+                submitBtn.textContent = 'Create Account';
+                switchLink.textContent = 'Sign in';
+                switchText.innerHTML = `Already have an account? <a href="#" onclick="event.preventDefault(); toggleEmailAuthMode()" style="color: var(--accent); text-decoration: none;">Sign in</a>`;
+                modalTitle.textContent = 'Create Account';
             } else {
                 nameField.classList.add('hidden');
+                submitBtn.textContent = 'Sign In';
+                switchLink.textContent = 'Create account';
+                switchText.innerHTML = `Don't have an account? <a href="#" onclick="event.preventDefault(); toggleEmailAuthMode()" style="color: var(--accent); text-decoration: none;">Create account</a>`;
+                modalTitle.textContent = 'Sign In';
             }
         }
 
-        function submitAuth() {
+        function toggleEmailAuthMode() {
+            state.authMode = state.authMode === 'login' ? 'register' : 'login';
+            updateEmailAuthUI();
+        }
+
+        // Facebook OAuth flow
+        function initiateFacebookAuth() {
+            console.log('Initiating Facebook OAuth...');
+            
+            // Show loading
+            const spinner = document.getElementById('spinnerOverlay');
+            const spinnerText = spinner.querySelector('.spinner-text');
+            spinnerText.textContent = 'Redirecting to Facebook...';
+            spinner.classList.add('active');
+            
+            // In production, redirect to Facebook OAuth:
+            // const facebookAuthUrl = `https://www.facebook.com/v18.0/dialog/oauth?client_id=YOUR_FACEBOOK_APP_ID&redirect_uri=${encodeURIComponent(window.location.origin + '/auth/facebook/callback')}&scope=email,public_profile&response_type=code`;
+            // window.location.href = facebookAuthUrl;
+            
+            // Simulate OAuth redirect and callback (FOR DEMO ONLY)
+            setTimeout(() => {
+                spinner.classList.remove('active');
+                spinnerText.textContent = 'Processing payment...';
+                
+                // Simulate successful OAuth return
+                completeFacebookAuth({
+                    id: 'facebook_' + Date.now(),
+                    name: 'Facebook User',
+                    email: 'user@facebook.com',
+                    provider: 'facebook'
+                });
+            }, 1500);
+        }
+
+        function completeFacebookAuth(userData) {
+            state.currentUser = {
+                id: userData.id,
+                name: userData.name,
+                email: userData.email,
+                role: 'user',
+                provider: 'facebook'
+            };
+
+            console.log('Facebook auth completed:', state.currentUser);
+            
+            updateAuthUI();
+            closeAuthModal();
+            switchTab('book');
+            showToast('Successfully signed in with Facebook', 'success');
+        }
+
+        // Instagram OAuth flow
+        function initiateInstagramAuth() {
+            console.log('Initiating Instagram OAuth...');
+            
+            // Show loading
+            const spinner = document.getElementById('spinnerOverlay');
+            const spinnerText = spinner.querySelector('.spinner-text');
+            spinnerText.textContent = 'Redirecting to Instagram...';
+            spinner.classList.add('active');
+            
+            // In production, redirect to Instagram OAuth:
+            // Note: Instagram uses Facebook's Graph API for authentication
+            // const instagramAuthUrl = `https://api.instagram.com/oauth/authorize?client_id=YOUR_INSTAGRAM_APP_ID&redirect_uri=${encodeURIComponent(window.location.origin + '/auth/instagram/callback')}&scope=user_profile,user_media&response_type=code`;
+            // window.location.href = instagramAuthUrl;
+            
+            // Simulate OAuth redirect and callback (FOR DEMO ONLY)
+            setTimeout(() => {
+                spinner.classList.remove('active');
+                spinnerText.textContent = 'Processing payment...';
+                
+                // Simulate successful OAuth return
+                completeInstagramAuth({
+                    id: 'instagram_' + Date.now(),
+                    name: 'Instagram User',
+                    email: 'user@instagram.com',
+                    provider: 'instagram'
+                });
+            }, 1500);
+        }
+
+        function completeInstagramAuth(userData) {
+            state.currentUser = {
+                id: userData.id,
+                name: userData.name,
+                email: userData.email,
+                role: 'user',
+                provider: 'instagram'
+            };
+
+            console.log('Instagram auth completed:', state.currentUser);
+            
+            updateAuthUI();
+            closeAuthModal();
+            switchTab('book');
+            showToast('Successfully signed in with Instagram', 'success');
+        }
+
+        // Apple OAuth flow
+        function initiateAppleAuth() {
+            console.log('Initiating Apple OAuth...');
+            
+            // Show loading
+            const spinner = document.getElementById('spinnerOverlay');
+            const spinnerText = spinner.querySelector('.spinner-text');
+            spinnerText.textContent = 'Redirecting to Apple...';
+            spinner.classList.add('active');
+            
+            // In production, redirect to Apple OAuth:
+            // const appleAuthUrl = `https://appleid.apple.com/auth/authorize?client_id=YOUR_CLIENT_ID&redirect_uri=${encodeURIComponent(window.location.origin + '/auth/apple/callback')}&response_type=code&scope=name email&response_mode=form_post`;
+            // window.location.href = appleAuthUrl;
+            
+            // Simulate OAuth redirect and callback (FOR DEMO ONLY)
+            setTimeout(() => {
+                spinner.classList.remove('active');
+                spinnerText.textContent = 'Processing payment...';
+                
+                // Simulate successful OAuth return
+                completeAppleAuth({
+                    id: 'apple_' + Date.now(),
+                    name: 'Apple User',
+                    email: 'user@icloud.com',
+                    provider: 'apple'
+                });
+            }, 1500);
+        }
+
+        function completeAppleAuth(userData) {
+            state.currentUser = {
+                id: userData.id,
+                name: userData.name,
+                email: userData.email,
+                role: 'user',
+                provider: 'apple'
+            };
+
+            console.log('Apple auth completed:', state.currentUser);
+            
+            updateAuthUI();
+            closeAuthModal();
+            switchTab('book');
+            showToast('Successfully signed in with Apple', 'success');
+        }
+
+        // Email/Password auth
+        function submitEmailAuth() {
             try {
-                console.log('Submit auth called, mode:', state.authMode);
+                console.log('Submit email auth, mode:', state.authMode);
                 
                 const email = document.getElementById('authEmail').value;
                 const password = document.getElementById('authPassword').value;
-
-                console.log('Email:', email, 'Password length:', password.length);
 
                 if (!email || !password) {
                     showToast('Please fill in all fields', 'error');
@@ -2304,21 +2460,29 @@
                         return;
                     }
 
+                    // In production: Call your backend API to create account
+                    // const response = await fetch('/api/auth/register', { ... });
+
                     state.currentUser = {
-                        id: 'user_' + Date.now(),
+                        id: 'email_' + Date.now(),
                         name,
                         email,
-                        role: email.includes('admin') ? 'admin' : 'user'
+                        role: email.includes('admin') ? 'admin' : 'user',
+                        provider: 'email'
                     };
 
                     console.log('User registered:', state.currentUser);
                     showToast('Account created successfully!', 'success');
                 } else {
+                    // In production: Call your backend API to verify credentials
+                    // const response = await fetch('/api/auth/login', { ... });
+
                     state.currentUser = {
-                        id: 'user_' + Date.now(),
+                        id: 'email_' + Date.now(),
                         name: email.split('@')[0],
                         email,
-                        role: email.includes('admin') ? 'admin' : 'user'
+                        role: email.includes('admin') ? 'admin' : 'user',
+                        provider: 'email'
                     };
 
                     console.log('User logged in:', state.currentUser);
@@ -2328,10 +2492,29 @@
                 updateAuthUI();
                 closeAuthModal();
                 switchTab('book');
+                
+                // Clear form
+                document.getElementById('authEmail').value = '';
+                document.getElementById('authPassword').value = '';
+                document.getElementById('authName').value = '';
+                
             } catch (error) {
-                console.error('Submit auth error:', error);
+                console.error('Email auth error:', error);
                 showToast('Authentication failed. Please try again.', 'error');
             }
+        }
+
+        function openAuthModal() {
+            showAuthSelection(); // Always show selection page first
+            document.getElementById('authModal').classList.add('active');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.remove('active');
+            // Reset to selection page
+            setTimeout(() => {
+                showAuthSelection();
+            }, 300);
         }
 
         function updateAuthUI() {
@@ -2355,6 +2538,7 @@
 
                 if (state.currentUser) {
                     authBtnText.textContent = state.currentUser.name;
+                    authBtn.onclick = logout; // Change to logout function
                     navTabs.classList.remove('hidden');
                     
                     if (state.currentUser.role === 'admin') {
@@ -2364,6 +2548,7 @@
                     console.log('Auth UI updated - user logged in');
                 } else {
                     authBtnText.textContent = 'Sign In';
+                    authBtn.onclick = openAuthModal; // Change back to open modal
                     navTabs.classList.add('hidden');
                     adminTab.classList.add('hidden');
                     
