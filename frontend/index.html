@@ -2256,6 +2256,33 @@
             return Math.random().toString(36).substring(2, 8).toUpperCase();
         }
 
+        // ===== OAuth Configuration =====
+        const OAUTH_CONFIG = {
+            // Set to true to enable real OAuth redirects (requires valid client IDs)
+            // Set to false for demo/testing mode
+            PRODUCTION_MODE: false, // Set to true after deploying to Render and configuring OAuth
+            
+            // Replace these with your actual OAuth credentials from:
+            // Facebook: https://developers.facebook.com
+            // Instagram: https://developers.facebook.com (same app)
+            // Apple: https://developer.apple.com
+            FACEBOOK_APP_ID: 'YOUR_FACEBOOK_APP_ID',
+            INSTAGRAM_APP_ID: 'YOUR_INSTAGRAM_APP_ID',
+            APPLE_CLIENT_ID: 'YOUR_APPLE_CLIENT_ID',
+            
+            // Automatically detects Render URL or localhost
+            // Render URLs look like: https://your-app-name.onrender.com
+            BASE_URL: (() => {
+                const origin = window.location.origin;
+                // If on Render or any proper web server
+                if (origin && origin !== 'null' && !origin.startsWith('file://')) {
+                    return origin;
+                }
+                // Fallback for local file testing
+                return 'https://your-app-name.onrender.com'; // Replace with your Render URL
+            })()
+        };
+
         // ===== Auth Functions =====
         
         // Show/hide auth pages
@@ -2304,29 +2331,31 @@
         function initiateFacebookAuth() {
             console.log('Initiating Facebook OAuth...');
             
-            // Show loading
-            const spinner = document.getElementById('spinnerOverlay');
-            const spinnerText = spinner.querySelector('.spinner-text');
-            spinnerText.textContent = 'Redirecting to Facebook...';
-            spinner.classList.add('active');
-            
-            // In production, redirect to Facebook OAuth:
-            // const facebookAuthUrl = `https://www.facebook.com/v18.0/dialog/oauth?client_id=YOUR_FACEBOOK_APP_ID&redirect_uri=${encodeURIComponent(window.location.origin + '/auth/facebook/callback')}&scope=email,public_profile&response_type=code`;
-            // window.location.href = facebookAuthUrl;
-            
-            // Simulate OAuth redirect and callback (FOR DEMO ONLY)
-            setTimeout(() => {
-                spinner.classList.remove('active');
-                spinnerText.textContent = 'Processing payment...';
+            if (OAUTH_CONFIG.PRODUCTION_MODE) {
+                // PRODUCTION: Redirect to Facebook
+                const facebookAuthUrl = `https://www.facebook.com/v18.0/dialog/oauth?client_id=${OAUTH_CONFIG.FACEBOOK_APP_ID}&redirect_uri=${encodeURIComponent(OAUTH_CONFIG.BASE_URL + '/auth/facebook/callback')}&scope=email,public_profile&response_type=code&state=${generateStateToken()}`;
                 
-                // Simulate successful OAuth return
-                completeFacebookAuth({
-                    id: 'facebook_' + Date.now(),
-                    name: 'Facebook User',
-                    email: 'user@facebook.com',
-                    provider: 'facebook'
-                });
-            }, 1500);
+                console.log('Redirecting to:', facebookAuthUrl);
+                window.location.href = facebookAuthUrl;
+            } else {
+                // DEMO MODE: Simulate OAuth
+                const spinner = document.getElementById('spinnerOverlay');
+                const spinnerText = spinner.querySelector('.spinner-text');
+                spinnerText.textContent = 'Redirecting to Facebook...';
+                spinner.classList.add('active');
+                
+                setTimeout(() => {
+                    spinner.classList.remove('active');
+                    spinnerText.textContent = 'Processing payment...';
+                    
+                    completeFacebookAuth({
+                        id: 'facebook_' + Date.now(),
+                        name: 'Facebook User',
+                        email: 'user@facebook.com',
+                        provider: 'facebook'
+                    });
+                }, 1500);
+            }
         }
 
         function completeFacebookAuth(userData) {
@@ -2350,30 +2379,31 @@
         function initiateInstagramAuth() {
             console.log('Initiating Instagram OAuth...');
             
-            // Show loading
-            const spinner = document.getElementById('spinnerOverlay');
-            const spinnerText = spinner.querySelector('.spinner-text');
-            spinnerText.textContent = 'Redirecting to Instagram...';
-            spinner.classList.add('active');
-            
-            // In production, redirect to Instagram OAuth:
-            // Note: Instagram uses Facebook's Graph API for authentication
-            // const instagramAuthUrl = `https://api.instagram.com/oauth/authorize?client_id=YOUR_INSTAGRAM_APP_ID&redirect_uri=${encodeURIComponent(window.location.origin + '/auth/instagram/callback')}&scope=user_profile,user_media&response_type=code`;
-            // window.location.href = instagramAuthUrl;
-            
-            // Simulate OAuth redirect and callback (FOR DEMO ONLY)
-            setTimeout(() => {
-                spinner.classList.remove('active');
-                spinnerText.textContent = 'Processing payment...';
+            if (OAUTH_CONFIG.PRODUCTION_MODE) {
+                // PRODUCTION: Redirect to Instagram
+                const instagramAuthUrl = `https://api.instagram.com/oauth/authorize?client_id=${OAUTH_CONFIG.INSTAGRAM_APP_ID}&redirect_uri=${encodeURIComponent(OAUTH_CONFIG.BASE_URL + '/auth/instagram/callback')}&scope=user_profile,user_media&response_type=code&state=${generateStateToken()}`;
                 
-                // Simulate successful OAuth return
-                completeInstagramAuth({
-                    id: 'instagram_' + Date.now(),
-                    name: 'Instagram User',
-                    email: 'user@instagram.com',
-                    provider: 'instagram'
-                });
-            }, 1500);
+                console.log('Redirecting to:', instagramAuthUrl);
+                window.location.href = instagramAuthUrl;
+            } else {
+                // DEMO MODE: Simulate OAuth
+                const spinner = document.getElementById('spinnerOverlay');
+                const spinnerText = spinner.querySelector('.spinner-text');
+                spinnerText.textContent = 'Redirecting to Instagram...';
+                spinner.classList.add('active');
+                
+                setTimeout(() => {
+                    spinner.classList.remove('active');
+                    spinnerText.textContent = 'Processing payment...';
+                    
+                    completeInstagramAuth({
+                        id: 'instagram_' + Date.now(),
+                        name: 'Instagram User',
+                        email: 'user@instagram.com',
+                        provider: 'instagram'
+                    });
+                }, 1500);
+            }
         }
 
         function completeInstagramAuth(userData) {
@@ -2397,29 +2427,31 @@
         function initiateAppleAuth() {
             console.log('Initiating Apple OAuth...');
             
-            // Show loading
-            const spinner = document.getElementById('spinnerOverlay');
-            const spinnerText = spinner.querySelector('.spinner-text');
-            spinnerText.textContent = 'Redirecting to Apple...';
-            spinner.classList.add('active');
-            
-            // In production, redirect to Apple OAuth:
-            // const appleAuthUrl = `https://appleid.apple.com/auth/authorize?client_id=YOUR_CLIENT_ID&redirect_uri=${encodeURIComponent(window.location.origin + '/auth/apple/callback')}&response_type=code&scope=name email&response_mode=form_post`;
-            // window.location.href = appleAuthUrl;
-            
-            // Simulate OAuth redirect and callback (FOR DEMO ONLY)
-            setTimeout(() => {
-                spinner.classList.remove('active');
-                spinnerText.textContent = 'Processing payment...';
+            if (OAUTH_CONFIG.PRODUCTION_MODE) {
+                // PRODUCTION: Redirect to Apple
+                const appleAuthUrl = `https://appleid.apple.com/auth/authorize?client_id=${OAUTH_CONFIG.APPLE_CLIENT_ID}&redirect_uri=${encodeURIComponent(OAUTH_CONFIG.BASE_URL + '/auth/apple/callback')}&response_type=code&scope=name email&response_mode=form_post&state=${generateStateToken()}`;
                 
-                // Simulate successful OAuth return
-                completeAppleAuth({
-                    id: 'apple_' + Date.now(),
-                    name: 'Apple User',
-                    email: 'user@icloud.com',
-                    provider: 'apple'
-                });
-            }, 1500);
+                console.log('Redirecting to:', appleAuthUrl);
+                window.location.href = appleAuthUrl;
+            } else {
+                // DEMO MODE: Simulate OAuth
+                const spinner = document.getElementById('spinnerOverlay');
+                const spinnerText = spinner.querySelector('.spinner-text');
+                spinnerText.textContent = 'Redirecting to Apple...';
+                spinner.classList.add('active');
+                
+                setTimeout(() => {
+                    spinner.classList.remove('active');
+                    spinnerText.textContent = 'Processing payment...';
+                    
+                    completeAppleAuth({
+                        id: 'apple_' + Date.now(),
+                        name: 'Apple User',
+                        email: 'user@icloud.com',
+                        provider: 'apple'
+                    });
+                }, 1500);
+            }
         }
 
         function completeAppleAuth(userData) {
@@ -2437,6 +2469,11 @@
             closeAuthModal();
             switchTab('book');
             showToast('Successfully signed in with Apple', 'success');
+        }
+
+        // Generate state token for OAuth security
+        function generateStateToken() {
+            return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
         }
 
         // Email/Password auth
